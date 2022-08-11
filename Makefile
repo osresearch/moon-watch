@@ -34,13 +34,13 @@ $(eval $(call _icon,$(strip $1),$(strip $2),$3,$4))
 endef
 
 $(call icon, icHome, home.png, 14, 14)
-$(call icon, !icon_lg, icon.png, 44, 44)
-$(call icon, !icon_sm, icon.png, 44, 44)
+$(call icon, !icon_lg, time.png, 44, 44) # When selected
+$(call icon, !icon_sm, moon.png, 44, 44) # Unselected in the menu
 
 layouts += timer_layout
 
 # Generate a new icon every build so that it is easy to see if the upload worked
-icon.png: $(source_file)
+time.png: $(source_file)
 	convert \
 		-size 420x420 \
 		-background black \
