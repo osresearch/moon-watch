@@ -1,0 +1,4 @@
+*.wapp
+/build/files/code
+build
+.*.swp
