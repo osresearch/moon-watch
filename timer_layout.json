@@ -78,5 +78,68 @@
         },
         "visible": true,
         "inversion": false
+    },
+    {
+        "id": 4,
+        "parent_id": 0,
+	"color": 2,
+        "type": "solid",
+	"text": "^",
+	"ppem": 10,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 10,
+            "height": 10
+        },
+        "placement": {
+            "type": "absolute",
+            "left": "#sunrise_x",
+            "top": "#sunrise_y"
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 5,
+        "parent_id": 0,
+        "type": "solid",
+	"text": "v",
+	"color": 2,
+	"ppem": 10,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 10,
+            "height": 10
+        },
+        "placement": {
+            "type": "absolute",
+            "left": "#sunset_x",
+            "top": "#sunset_y"
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 6,
+        "parent_id": 0,
+        "type": "solid",
+	"text": "x",
+	"color": 3,
+	"ppem": 10,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 16,
+            "height": 16
+        },
+        "placement": {
+            "type": "absolute",
+            "left": "#noon_x",
+            "top": "#noon_y"
+        },
+        "visible": true,
+        "inversion": false
     }
 ]

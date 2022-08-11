@@ -147,6 +147,13 @@ return {
 		};
 	},
 
+	"hour_coords": function(radius, hour) {
+		return {
+			x: 240/2 + radius * Math.sin(2 * Math.PI * hour / 24),
+			y: 240/2 - radius * Math.cos(2 * Math.PI * hour / 24),
+		};
+	},
+
 	// from https://www.hermetic.ch/cal_stud/jdn.htm
 	"julian": function(y,m,d) {
 		var m14 = Math.floor((m-14)/12);
@@ -180,10 +187,20 @@ return {
 		var moon_image = Math.floor(lunar_day * 24 / lunar_len);
 
 		// update the hour hand position
-		var hour = common.hour;
-		var hour_str = localization_snprintf("%02d", hour);
-		var hour_x = 240/2 + 110 * Math.sin(2 * Math.PI * hour / 24);
-		var hour_y = 240/2 - 110 * Math.cos(2 * Math.PI * hour / 24);
+		var hour_int = common.hour;
+		var hour_frac = hour_int + common.minute / 60;
+		var hour_str = localization_snprintf("%02d", hour_int);
+		var hour = this.hour_coords(90, hour_int);
+
+		// update the solar information; how to get the lat/lon?
+		var lat = 52.3676;
+		var lon = 4.9041;
+		var tz = common.time_zone_local;
+		var solar = this.solar_noon(common.year, common.month+1, common.date, hour_frac, lat, lon, tz);
+
+		var sunrise = this.hour_coords(110, solar.sunrise);
+		var noon = this.hour_coords(105, solar.noon);
+		var sunset = this.hour_coords(110, solar.sunset);
 
 		response.draw = {
 			"update_type": 'du4', // full.	gu4 == partial
@@ -193,15 +210,85 @@ return {
 			layout_info: {
 				json_file: 'timer_layout',
 				moon_phase: 'moon_' + moon_image,
+
 				// date, away from the hour hand
 				date: ymd,
 				date_y: common.hour > 18 || common.hour < 6 ? 210 : 40,
 
 				// hour hand label
 				hour: hour_str,
-				hour_x: hour_x,
-				hour_y: hour_y,
+				hour_x: hour.x - 20,
+				hour_y: hour.y - 10,
+
+				// solar data
+				sunrise_x: sunrise.x - 5,
+				sunrise_y: sunrise.y - 5,
+				sunset_x: sunset.x - 5,
+				sunset_y: sunset.y - 5,
+				noon_x: noon.x - 8,
+				noon_y: noon.y - 8,
 			},
+		};
+	},
+
+	"leap_year": function(y)
+	{
+		if (y % 4 != 0)
+			return false;
+		if (y % 400 == 0)
+			return true;
+		return y % 100 != 0;
+	},
+		
+/* General solar position calculations https://gml.noaa.gov/grad/solcalc/solareqns.PDF */
+	"solar_noon": function(y,m,d,hour,lat,lon,tz) {
+		var lat_rad = lat * Math.PI / 180;
+		var lon_rad = lon * Math.PI / 180;
+
+		var day_of_year = this.julian(y,m,d) - this.julian(y,1,1);
+		var days_in_year = this.leap_year(y) ? 366 : 365;
+		var frac_year = 2 * Math.PI / days_in_year * (day_of_year - 1 + (hour - 12) / 24);
+
+		// estimate equation of time in minutes
+		var eqtime = 229.18*(
+			+ 0.000075
+			+ 0.001868*Math.cos(frac_year)
+			- 0.032077*Math.sin(frac_year)
+			- 0.014615*Math.cos(2*frac_year)
+			- 0.040849*Math.sin(2*frac_year)
+		);
+
+		// estimate of solar declination angle (radians)
+		var decl = (
+			+ 0.006918
+			- 0.399912*Math.cos(frac_year)
+			+ 0.070257*Math.sin(frac_year)
+			- 0.006758*Math.cos(2*frac_year)
+			+ 0.000907*Math.sin(2*frac_year)
+			- 0.002697*Math.cos(3*frac_year)
+			+ 0.001480*Math.sin(3*frac_year)
+		);
+
+		// approximate correction for atmospheric refraction
+		// and the size of the solar disk
+		var zenith = 90.833 * Math.PI / 180;
+
+		// hour angle (in deg) for the given zenith angle (in radians)
+		var ha = Math.acos(
+			Math.cos(zenith) / (Math.cos(lat_rad) * Math.cos(decl))
+			- Math.tan(lat_rad) * Math.tan(decl)
+		) * 180 / Math.PI;
+
+		// estimate the minute of sunrise, noon and sunset based on the hour angle
+		var sunrise_utc = 720 - 4 * (lon + ha) - eqtime;
+		var sunset_utc = 720 - 4 * (lon - ha) - eqtime;
+		var noon_utc = 720 - 4 * lon - eqtime;
+
+		// convert it to a fractional hour of local time
+		return {
+			sunrise: (sunrise_utc + tz) / 60,
+			noon: (noon_utc + tz) / 60,
+			sunset: (sunset_utc + tz) / 60,
 		};
 	},
 };
