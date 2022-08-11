@@ -136,7 +136,7 @@ return {
 		var hour = common.hour;
 		var minute = common.minute;
 		//var minute = (now() % 60000) / 1000; // actually seconds
-		var degrees_hour = 360 * hour / 24;
+		var degrees_hour = 360 * (hour + minute/60) / 24;
 		var degrees_minute = 360 * minute / 60;
 
 		// move the hands to an absolute position
