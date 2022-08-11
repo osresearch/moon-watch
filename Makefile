@@ -36,6 +36,30 @@ endef
 $(call icon, icHome, home.png, 14, 14)
 $(call icon, !icon_lg, time.png, 44, 44) # When selected
 $(call icon, !icon_sm, moon.png, 44, 44) # Unselected in the menu
+$(call icon, moon_0, images/moon-0_0.png, 160, 160)
+$(call icon, moon_1, images/moon-0_1.png, 160, 160)
+$(call icon, moon_2, images/moon-0_2.png, 160, 160)
+$(call icon, moon_3, images/moon-0_3.png, 160, 160)
+$(call icon, moon_4, images/moon-1_0.png, 160, 160)
+$(call icon, moon_5, images/moon-1_1.png, 160, 160)
+$(call icon, moon_6, images/moon-1_2.png, 160, 160)
+$(call icon, moon_7, images/moon-1_3.png, 160, 160)
+$(call icon, moon_8, images/moon-2_0.png, 160, 160)
+$(call icon, moon_9, images/moon-2_1.png, 160, 160)
+$(call icon, moon_10, images/moon-2_2.png, 160, 160)
+$(call icon, moon_11, images/moon-2_3.png, 160, 160)
+$(call icon, moon_12, images/moon-3_0.png, 160, 160)
+$(call icon, moon_13, images/moon-3_1.png, 160, 160)
+$(call icon, moon_14, images/moon-3_2.png, 160, 160)
+$(call icon, moon_15, images/moon-3_3.png, 160, 160)
+$(call icon, moon_16, images/moon-4_0.png, 160, 160)
+$(call icon, moon_17, images/moon-4_1.png, 160, 160)
+$(call icon, moon_18, images/moon-4_2.png, 160, 160)
+$(call icon, moon_19, images/moon-4_3.png, 160, 160)
+$(call icon, moon_20, images/moon-5_0.png, 160, 160)
+$(call icon, moon_21, images/moon-5_1.png, 160, 160)
+$(call icon, moon_22, images/moon-5_2.png, 160, 160)
+$(call icon, moon_23, images/moon-5_3.png, 160, 160)
 
 layouts += timer_layout
 

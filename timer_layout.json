@@ -1,40 +1,59 @@
 [
     {
-        "id": 0,
-        "type": "wapp_template",
-        "header_icon": "icHome",
-        "title_icon": "#title_icon",
-        "title_string": "#title",
-        "is_header_selected": "false",
+      "id": 0,
+      "type": "container",
+      "direction": 1,
+      "main_alignment": 0,
+      "cross_alignment": 1,
+      "dimension": {
+        "type": "rigid",
+        "width": 240,
+        "height": 240
+      },
+      "placement": {
+        "type": "absolute",
+        "left": 0,
+        "top": 0
+      },
+      "visible": true,
+      "inversion": false
+    },
+    {
+        "id": 1,
+        "parent_id": 0,
+        "type": "image",
+        "image_name": "#moon_phase",
+        "is_translate": false,
         "dimension": {
             "type": "rigid",
-            "width": 240,
-            "height": 240
+            "width": 160,
+            "height": 160
         },
         "placement": {
             "type": "absolute",
-            "left": 0,
-            "top": 0
+            "left": 40,
+            "top": 40
         },
         "visible": true,
         "inversion": false
     },
     {
-        "id": 1,
+        "id": 2,
         "parent_id": 0,
-        "type": "option_menu",
-        "options": "#laps",
-        "option_selected": -1,
+        "type": "text",
+        "text": "#date",
+	"color": 2,
+	"ppem": 20,
         "is_translate": false,
         "dimension": {
             "type": "rigid",
-            "width": 240,
-            "height": 66
+            "width": 160,
+            "height": 160
         },
         "placement": {
             "type": "absolute",
-            "left": 0,
-            "top": 150
+            "left": 70,
+            "top": 40
         },
         "visible": true,
         "inversion": false

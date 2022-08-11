@@ -85,6 +85,7 @@ return {
 			"entry": function(self,state_machine,event,response) {
 				enable_time_telling();
 				start_timer(self.node_name, 'timer_tick', 100);
+
 			},
 			"exit": function(self,state_machine,event,response) {
 				stop_timer(self.node_name, 'timer_tick');
@@ -92,8 +93,12 @@ return {
 			"timer_expired": function(self,state_machine,event,response) {
 				if (!is_this_timer_expired(event, self.node_name, 'timer_tick'))
 					return;
+
+				// schedule once an hour for redarw
+				start_timer(self.node_name, 'timer_tick', 60*60*1000);
+
 				self.draw_hands(response);
-				//start_timer(self.node_name, 'timer_tick', 2000);
+				self.draw_moon(response);
 			},
 
 			// called every 20 seconds or so to update the hands
@@ -138,6 +143,51 @@ return {
 			h: degrees_hour,
 			m: degrees_minute,
 			is_relative: false,
+		};
+	},
+
+	// from https://www.hermetic.ch/cal_stud/jdn.htm
+	"julian": function(y,m,d) {
+		var m14 = Math.floor((m-14)/12);
+		return  Math.floor( 1461 * ( y + 4800 + m14 ) / 4) +
+			Math.floor(  367 * ( m - 2 - 12 * m14 ) / 12) -
+			Math.floor(    3 * Math.floor((y + 4900 + m14) / 100) / 4) +
+			d - 32075;
+	},
+
+/*
+ * The approximate age of the Moon, and hence the approximate phase, can be
+ * calculated for any date by calculating the number of days since a known
+ * new moon (such as January 1, 1900 or August 11, 1999) and reducing this
+ * modulo 29.53059 days (the mean length of a synodic month).[6][e] The
+ * difference between two dates can be calculated by subtracting the Julian
+ * day number of one from that of the other, or there are simpler formulae
+ * giving (for instance) the number of days since December 31, 1899.
+ */
+	"draw_moon": function(response) {
+		var ymd = localization_snprintf("%04d-%02d-%02d",
+			common.year, common.month+1, common.date);
+
+		var jd = this.julian(common.year, common.month+1, common.date);
+		var newmoon = this.julian(1900, 1, 1);
+		var delta = jd - newmoon;
+		var lunar_len = 29.53059;
+		var lunar_month = Math.floor(delta / lunar_len);
+		var lunar_day = delta - (lunar_month * lunar_len);
+
+		// we have 24 lunar images instead of 29, so scale it
+		var moon_image = Math.floor(lunar_day * 24 / lunar_len);
+
+		response.draw = {
+			"update_type": 'du4', // full.	gu4 == partial
+		};
+		response.draw[this.node_name] = {
+			layout_function: "layout_parser_json",
+			layout_info: {
+				json_file: 'timer_layout',
+				moon_phase: 'moon_' + moon_image,
+				date: ymd,
+			},
 		};
 	},
 };
