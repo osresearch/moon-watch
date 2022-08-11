@@ -1,3 +1,5 @@
+WATCH_SDK_PATH ?= ~/build/Fossil-HR-SDK/tools
+JERRYSCRIPT_PATH ?= ~/build/Fossil-HR-SDK/jerryscript-2.1.0/build/bin/
 
 json_file := app.json
 source_file := app.js
@@ -73,7 +75,7 @@ build_files += $(snapshot_file)
 
 $(snapshot_file): $(source_file) $(json_file)
 	@mkdir -p $(dir $@)
-	jerry-snapshot generate -f '' $< -o $@
+	$(JERRYSCRIPT_PATH)jerry-snapshot generate -f '' $< -o $@
 
 $(package_file): $(build_files)
 	$(pack) -i build/ -o $@
@@ -94,7 +96,6 @@ install:
 	--ez EXTRA_GENERATE_FILE_HEADER false
 
 clean:
-	rm -rf build/files/code build/files/icons
-	rm -f build/*.wapp
+	rm -rf build
 
 FORCE:
