@@ -53,7 +53,28 @@
         "placement": {
             "type": "absolute",
             "left": 70,
-            "top": 40
+            "top": "#date_y"
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 3,
+        "parent_id": 0,
+        "type": "text",
+        "text": "#hour",
+	"color": 3,
+	"ppem": 30,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 40,
+            "height": 40
+        },
+        "placement": {
+            "type": "absolute",
+            "left": "#hour_x",
+            "top": "#hour_y"
         },
         "visible": true,
         "inversion": false

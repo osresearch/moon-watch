@@ -94,8 +94,9 @@ return {
 				if (!is_this_timer_expired(event, self.node_name, 'timer_tick'))
 					return;
 
-				// schedule once an hour for redarw
-				start_timer(self.node_name, 'timer_tick', 60*60*1000);
+				// schedule to redraw at the start of the next hour
+				var delay = (60 - common.minute) * 60 * 1000;
+				start_timer(self.node_name, 'timer_tick', delay);
 
 				self.draw_hands(response);
 				self.draw_moon(response);
@@ -178,6 +179,12 @@ return {
 		// we have 24 lunar images instead of 29, so scale it
 		var moon_image = Math.floor(lunar_day * 24 / lunar_len);
 
+		// update the hour hand position
+		var hour = common.hour;
+		var hour_str = localization_snprintf("%02d", hour);
+		var hour_x = 240/2 + 110 * Math.sin(2 * Math.PI * hour / 24);
+		var hour_y = 240/2 - 110 * Math.cos(2 * Math.PI * hour / 24);
+
 		response.draw = {
 			"update_type": 'du4', // full.	gu4 == partial
 		};
@@ -186,7 +193,14 @@ return {
 			layout_info: {
 				json_file: 'timer_layout',
 				moon_phase: 'moon_' + moon_image,
+				// date, away from the hour hand
 				date: ymd,
+				date_y: common.hour > 18 || common.hour < 6 ? 210 : 40,
+
+				// hour hand label
+				hour: hour_str,
+				hour_x: hour_x,
+				hour_y: hour_y,
 			},
 		};
 	},
