@@ -19,4 +19,12 @@ convert \
 	PNG32:"images/moon-%[filename:tile].png"
 ```
 
+## Celestial math
+
+* https://gml.noaa.gov/grad/solcalc/solareqns.PDF
+
+## Notes
+
+* If you want to reset the watch, hold down the middle button until it vibrates.
+* Do *NOT* select "Reset and disconnect"; it will erase the watch menu and you'll have to re-pair with the factory app
 
