@@ -5,18 +5,17 @@
    version="1.1"
    viewBox="0 0 315 315"
    id="svg1458"
-   sodipodi:docname="moon.svg"
+   sodipodi:docname="moonrise.svg"
    inkscape:version="1.2 (dc2aeda, 2022-05-15)"
-   inkscape:export-filename="moon.png"
+   inkscape:export-filename="moonset.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
+   xml:space="preserve"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs1462" />
-  <sodipodi:namedview
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+     id="defs1462" /><sodipodi:namedview
      id="namedview1460"
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -35,15 +34,21 @@
      inkscape:window-x="0"
      inkscape:window-y="35"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg1458" />
-  <circle
+     inkscape:current-layer="svg1458" /><circle
      style="fill:#000000;stroke-width:0.299597;stroke-miterlimit:10"
      id="path1637"
      cx="158.29836"
      cy="157.96272"
-     r="154.13486" />
-  <path
+     r="154.13486" /><path
      id="path2261"
-     style="fill:#ffffff;stroke-width:4;stroke-miterlimit:10;stroke-dasharray:none"
-     d="M 157.68444,18.796636 A 136.44092,136.44092 0 0 0 28.489606,154.79859 136.44092,136.44092 0 0 0 164.93102,291.24 136.44092,136.44092 0 0 0 240.51549,268.24927 132.82854,132.82854 0 0 1 215.99547,270.77759 132.82854,132.82854 0 0 1 83.166366,137.94849 132.82854,132.82854 0 0 1 157.68444,18.796636 Z" />
-</svg>
+     style="fill:#808080;stroke-width:4;stroke-miterlimit:10;stroke-dasharray:none"
+     d="M 154.68444,20.296636 A 136.44092,136.44092 0 0 0 25.489606,156.29859 136.44092,136.44092 0 0 0 161.93102,292.74 136.44092,136.44092 0 0 0 237.51549,269.74927 132.82854,132.82854 0 0 1 212.99547,272.27759 132.82854,132.82854 0 0 1 80.166366,139.44849 132.82854,132.82854 0 0 1 154.68444,20.296636 Z" /><g
+     id="g8310"
+     transform="matrix(3.6940677,6.0487734e-4,-6.0487734e-4,3.6940677,-1541.9936,-852.3936)"
+     style="fill:#ffffff"><g
+       id="g8324"
+       style="fill:#ffffff"><path
+         d="m 431.92348,286.07799 29.598,-37 29.598,37 z"
+         fill-rule="evenodd"
+         id="path8308"
+         style="fill:#ffffff" /></g></g></svg>

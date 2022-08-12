@@ -39,6 +39,8 @@ $(call icon, !icon_sm, images/moon.png, 44, 44) # Unselected in the menu
 $(call icon, ring, images/ring.png, 240, 240)
 $(call icon, sun, images/sun.png, 20, 20)
 $(call icon, circle, images/circle.png, 16, 16)
+$(call icon, moonrise, images/moonrise.png, 24, 24)
+$(call icon, moonset, images/moonset.png, 24, 24)
 $(call icon, moon_0, images/moon-0_0.png, 160, 160)
 $(call icon, moon_1, images/moon-0_1.png, 160, 160)
 $(call icon, moon_2, images/moon-0_2.png, 160, 160)

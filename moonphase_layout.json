@@ -192,5 +192,43 @@
         },
         "visible": true,
         "inversion": false
+    },
+    {
+        "id": 10,
+        "parent_id": 0,
+        "type": "image",
+        "image_name": "moonrise",
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 10,
+            "height": 10
+        },
+        "placement": {
+            "type": "absolute",
+            "left": "#moonrise_x",
+            "top": "#moonrise_y"
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 11,
+        "parent_id": 0,
+        "type": "image",
+        "image_name": "moonset",
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 10,
+            "height": 10
+        },
+        "placement": {
+            "type": "absolute",
+            "left": "#moonset_x",
+            "top": "#moonset_y"
+        },
+        "visible": true,
+        "inversion": false
     }
 ]
