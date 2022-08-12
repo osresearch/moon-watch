@@ -144,7 +144,7 @@ return {
 			// start the animation counter and reset the timer
 			"entry": function(self,sm,event,response) {
 				self.animation_steps = 24 * 3;
-				start_timer(self.node_name, 'timer_tick', 100);
+				start_timer(self.node_name, 'timer_tick', 10);
 			},
 			"timer_expired": function(self,sm,event,response) {
 				if (self.animation_steps-- == 0)
@@ -153,7 +153,7 @@ return {
 					return;
 				}
 
-				start_timer(self.node_name, 'timer_tick', 80);
+				start_timer(self.node_name, 'timer_tick', 60);
 
 				if ((self.animation_steps % 3) == 2)
 				{
@@ -162,8 +162,8 @@ return {
 				}
 
 				response.move = {
-					h: 60,
-					m: -60,
+					h: 49,
+					m: -49,
 					is_relative: true,
 				};
 
