@@ -38,6 +38,7 @@ $(call icon, !icon_lg, time.png, 44, 44) # When selected
 $(call icon, !icon_sm, moon.png, 44, 44) # Unselected in the menu
 $(call icon, ring, ring.png, 240, 240)
 $(call icon, sun, sun.png, 20, 20)
+$(call icon, circle, circle.png, 16, 16)
 $(call icon, moon_0, images/moon-0_0.png, 160, 160)
 $(call icon, moon_1, images/moon-0_1.png, 160, 160)
 $(call icon, moon_2, images/moon-0_2.png, 160, 160)

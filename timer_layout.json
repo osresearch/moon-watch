@@ -139,10 +139,8 @@
     {
         "id": 7,
         "parent_id": 0,
-	"color": 2,
-        "type": "solid",
-	"text": "^",
-	"ppem": 10,
+        "type": "image",
+        "image_name": "circle",
         "is_translate": false,
         "dimension": {
             "type": "rigid",
@@ -160,10 +158,8 @@
     {
         "id": 8,
         "parent_id": 0,
-        "type": "solid",
-	"text": "v",
-	"color": 2,
-	"ppem": 10,
+        "type": "image",
+        "image_name": "circle",
         "is_translate": false,
         "dimension": {
             "type": "rigid",

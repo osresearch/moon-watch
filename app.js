@@ -98,8 +98,8 @@ return {
 					return;
 
 				self.update_moon();
-				self.draw_moon(response);
-				self.draw_hands(response, true);
+				self.draw_moon(response, true);
+				self.draw_hands(response);
 
 				// schedule to redraw at the start of the next hour
 				var delay = (60 - common.minute) * 60 * 1000;
@@ -178,9 +178,11 @@ return {
 		var hour = common.hour;
 		var minute = common.minute;
 
+		var hands = enable_time_telling();
+
 		// put 12 at the top
 		var degrees_hour = 360 * (hour + minute/60 + 12) / 24;
-		var degrees_minute = 360 * minute / 60;
+		var degrees_minute = hands.minute_pos;
 
 		// pre-wrap the hour hand
 		if (degrees_hour > 360)
@@ -255,9 +257,9 @@ return {
 		var ymd = localization_snprintf("%04d-%02d-%02d",
 			common.year, common.month+1, common.date);
 
-		var sunrise = this.hour_coords(110, this.solar.sunrise);
-		var noon = this.hour_coords(105, this.solar.noon);
-		var sunset = this.hour_coords(110, this.solar.sunset);
+		var noon = this.hour_coords(108, this.solar.noon);
+		var sunrise = this.hour_coords(112, this.solar.sunrise);
+		var sunset = this.hour_coords(112, this.solar.sunset);
 
 		var hour_int = common.hour;
 		var hour_str = localization_snprintf("%02d", hour_int);
@@ -287,10 +289,10 @@ return {
 				hour_y: hour.y - 15,
 
 				// solar data
-				sunrise_x: sunrise.x - 5,
-				sunrise_y: sunrise.y - 5,
-				sunset_x: sunset.x - 5,
-				sunset_y: sunset.y - 5,
+				sunrise_x: sunrise.x - 8,
+				sunrise_y: sunrise.y - 8,
+				sunset_x: sunset.x - 6,
+				sunset_y: sunset.y - 8,
 				noon_x: noon.x - 10,
 				noon_y: noon.y - 10,
 
