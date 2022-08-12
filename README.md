@@ -1,12 +1,12 @@
 # Moonphase and 24-hour clock
 
-![Moon phase watch in an early form](moonwatch.jpg)
+![Moon phase watch in an early form](images/moonwatch.jpg)
 
 This is an application to demonstrate a simple watch face with image drawing.
 
 You will need to have built and installed `jerryscript-2.1.0` as well as the `Fossil-HR-SDK`.
 
-![Moon phases](moonphases.png)
+![Moon phases](images/moonphases.png)
 
 ```
 convert \

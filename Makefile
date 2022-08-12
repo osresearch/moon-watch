@@ -33,12 +33,12 @@ define icon
 $(eval $(call _icon,$(strip $1),$(strip $2),$3,$4))
 endef
 
-$(call icon, icHome, home.png, 14, 14)
-$(call icon, !icon_lg, time.png, 44, 44) # When selected
-$(call icon, !icon_sm, moon.png, 44, 44) # Unselected in the menu
-$(call icon, ring, ring.png, 240, 240)
-$(call icon, sun, sun.png, 20, 20)
-$(call icon, circle, circle.png, 16, 16)
+$(call icon, icHome, images/home.png, 14, 14)
+$(call icon, !icon_lg, build/time.png, 44, 44) # When selected
+$(call icon, !icon_sm, images/moon.png, 44, 44) # Unselected in the menu
+$(call icon, ring, images/ring.png, 240, 240)
+$(call icon, sun, images/sun.png, 20, 20)
+$(call icon, circle, images/circle.png, 16, 16)
 $(call icon, moon_0, images/moon-0_0.png, 160, 160)
 $(call icon, moon_1, images/moon-0_1.png, 160, 160)
 $(call icon, moon_2, images/moon-0_2.png, 160, 160)
@@ -89,7 +89,7 @@ build_files += $(icons)
 build_files += $(snapshot_file)
 
 # Generate a new icon every build so that it is easy to see if the upload worked
-time.png: $(source_file) $(filter-out build/files/icons/!icon_lg,$(build_files))
+build/time.png: $(source_file) $(filter-out build/files/icons/!icon_lg,$(build_files))
 	convert \
 		-size 420x420 \
 		-background black \
