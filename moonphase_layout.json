@@ -1,0 +1,196 @@
+[
+    {
+      "id": 0,
+      "type": "container",
+      "direction": 1,
+      "main_alignment": 0,
+      "cross_alignment": 1,
+      "dimension": {
+        "type": "rigid",
+        "width": 240,
+        "height": 240
+      },
+      "placement": {
+        "type": "absolute",
+        "left": 0,
+        "top": 0
+      },
+      "visible": true,
+      "inversion": false
+    },
+    {
+        "id": 1,
+        "parent_id": 0,
+        "type": "image",
+        "image_name": "ring",
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 240,
+            "height": 240
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 0,
+            "top": 0
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 2,
+        "parent_id": 0,
+        "type": "solid",
+	"color": 0,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 120,
+            "height": "#leftcover_h"
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 0,
+            "top": "#leftcover_y"
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 3,
+        "parent_id": 0,
+        "type": "solid",
+	"color": 0,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 120,
+            "height": "#rightcover_h"
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 120,
+            "top": "#rightcover_y"
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 4,
+        "parent_id": 0,
+        "type": "image",
+        "image_name": "#moon_phase",
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 160,
+            "height": 160
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 40,
+            "top": 40
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 5,
+        "parent_id": 0,
+        "type": "text",
+        "text": "#date",
+	"color": 2,
+	"ppem": 20,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 160,
+            "height": 160
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 70,
+            "top": "#date_y"
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 6,
+        "parent_id": 0,
+        "type": "text",
+        "text": "#hour",
+	"color": 3,
+	"ppem": 30,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 40,
+            "height": 40
+        },
+        "placement": {
+            "type": "absolute",
+            "left": "#hour_x",
+            "top": "#hour_y"
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 7,
+        "parent_id": 0,
+        "type": "image",
+        "image_name": "circle",
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 10,
+            "height": 10
+        },
+        "placement": {
+            "type": "absolute",
+            "left": "#sunrise_x",
+            "top": "#sunrise_y"
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 8,
+        "parent_id": 0,
+        "type": "image",
+        "image_name": "circle",
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 10,
+            "height": 10
+        },
+        "placement": {
+            "type": "absolute",
+            "left": "#sunset_x",
+            "top": "#sunset_y"
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 9,
+        "parent_id": 0,
+        "type": "image",
+	"image_name": "sun",
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 20,
+            "height": 20
+        },
+        "placement": {
+            "type": "absolute",
+            "left": "#noon_x",
+            "top": "#noon_y"
+        },
+        "visible": true,
+        "inversion": false
+    }
+]

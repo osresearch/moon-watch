@@ -276,7 +276,7 @@ return {
 		response.draw[this.node_name] = {
 			layout_function: "layout_parser_json",
 			layout_info: {
-				json_file: 'timer_layout',
+				json_file: 'moonphase_layout',
 				moon_phase: 'moon_' + this.moon_image,
 
 				// date, away from the hour hand

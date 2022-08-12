@@ -64,7 +64,7 @@ $(call icon, moon_21, images/moon-5_1.png, 160, 160)
 $(call icon, moon_22, images/moon-5_2.png, 160, 160)
 $(call icon, moon_23, images/moon-5_3.png, 160, 160)
 
-layouts += timer_layout
+layouts += moonphase_layout
 
 compile: $(snapshot_file)
 
