@@ -135,8 +135,9 @@ return {
 	"draw_hands": function(response) {
 		var hour = common.hour;
 		var minute = common.minute;
-		//var minute = (now() % 60000) / 1000; // actually seconds
-		var degrees_hour = 360 * (hour + minute/60) / 24;
+
+		// put 12 at the top
+		var degrees_hour = 360 * (hour + minute/60 + 12) / 24;
 		var degrees_minute = 360 * minute / 60;
 
 		// move the hands to an absolute position
@@ -147,10 +148,11 @@ return {
 		};
 	},
 
+	// 24 hours per rotation, with noon at the top (to match the real sky)
 	"hour_coords": function(radius, hour) {
 		return {
-			x: 240/2 + radius * Math.sin(2 * Math.PI * hour / 24),
-			y: 240/2 - radius * Math.cos(2 * Math.PI * hour / 24),
+			x: 240/2 + radius * Math.sin(2 * Math.PI * hour / 24 + Math.PI),
+			y: 240/2 - radius * Math.cos(2 * Math.PI * hour / 24 + Math.PI),
 		};
 	},
 
@@ -213,7 +215,7 @@ return {
 
 				// date, away from the hour hand
 				date: ymd,
-				date_y: common.hour > 18 || common.hour < 6 ? 210 : 40,
+				date_y: common.hour > 18 || common.hour < 6 ? 40: 210,
 
 				// hour hand label
 				hour: hour_str,
