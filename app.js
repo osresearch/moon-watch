@@ -183,6 +183,10 @@ return {
 		var degrees_hour = 360 * (hour + minute/60 + 12) / 24;
 		var degrees_minute = 360 * minute / 60;
 
+		// pre-wrap the hour hand
+		if (degrees_hour > 360)
+			degrees_hour -= 360;
+
 		// move the hands to an absolute position
 		response.move = {
 			h: degrees_hour,
@@ -258,7 +262,7 @@ return {
 
 		var hour_int = common.hour;
 		var hour_str = localization_snprintf("%02d", hour_int);
-		var hour = this.hour_coords(90, hour_int);
+		var hour = this.hour_coords(65, hour_int);
 
 		response.draw = {
 			"update_type": full ? 'gu4' : 'du4'
@@ -275,8 +279,8 @@ return {
 
 				// hour hand label
 				hour: hour_str,
-				hour_x: hour.x - 20,
-				hour_y: hour.y - 10,
+				hour_x: hour.x - 10,
+				hour_y: hour.y - 15,
 
 				// solar data
 				sunrise_x: sunrise.x - 5,
