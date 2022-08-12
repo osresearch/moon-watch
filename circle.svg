@@ -9,6 +9,9 @@
    id="svg6623"
    inkscape:version="1.2 (dc2aeda, 2022-05-15)"
    sodipodi:docname="circle.svg"
+   inkscape:export-filename="circle.png"
+   inkscape:export-xdpi="200"
+   inkscape:export-ydpi="200"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +43,7 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="fill:#f9f9f9;stroke:#808080;stroke-width:0;stroke-miterlimit:10"
+       style="fill:#999999;stroke:#808080;stroke-width:0;stroke-miterlimit:10"
        id="path6796"
        cx="-31.75"
        cy="31.75"
