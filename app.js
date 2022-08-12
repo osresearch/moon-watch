@@ -8,6 +8,9 @@ return {
 	},
 	"persist": {},
 	"config": {},
+	"animation_steps": 0,
+	"moon_image": 0,
+	"solar": null,
 
 	// called when application starts
 	"init": function () {
@@ -19,6 +22,7 @@ return {
 			undefined,
 			'background'
 		);
+		self.state_machine.new_state = self.state_machine.d;
 	},
 
 	// called periodically as a method on the object
@@ -34,7 +38,7 @@ return {
 	"handle_global_event": function (self, state_machine, event, response) {
 		if (event.type === 'system_state_update' && event.de)
 		{
-			state_machine.d(event.le === 'visible' ? 'draw_hands' : 'background');
+			state_machine.new_state(event.le === 'visible' ? 'draw_hands' : 'background');
 		} else
 		if (event.type === 'middle_hold')
 		{
@@ -94,12 +98,14 @@ return {
 				if (!is_this_timer_expired(event, self.node_name, 'timer_tick'))
 					return;
 
+				self.update_moon();
+				self.draw_moon(response);
+				self.draw_hands(response, true);
+
 				// schedule to redraw at the start of the next hour
 				var delay = (60 - common.minute) * 60 * 1000;
 				start_timer(self.node_name, 'timer_tick', delay);
 
-				self.draw_hands(response);
-				self.draw_moon(response);
 			},
 
 			// called every 20 seconds or so to update the hands
@@ -128,6 +134,43 @@ return {
 					m: 10,
 					is_relative: true,
 				};
+			},
+			"flick_away": function(self,sm,event,response) {
+				sm.new_state('animate_moon');
+			},
+		},
+
+		"animate_moon": {
+			// start the animation counter and reset the timer
+			"entry": function(self,sm,event,response) {
+				self.animation_steps = 24 * 3;
+				start_timer(self.node_name, 'timer_tick', 100);
+			},
+			"timer_expired": function(self,sm,event,response) {
+				if (self.animation_steps-- == 0)
+				{
+					sm.new_state('draw_hands');
+					return;
+				}
+
+				start_timer(self.node_name, 'timer_tick', 80);
+
+				if ((self.animation_steps % 3) == 2)
+				{
+					self.moon_image = (self.moon_image + 1) % 24;
+					self.draw_moon(response, false);
+				}
+
+				response.move = {
+					h: 60,
+					m: -60,
+					is_relative: true,
+				};
+
+			},
+			"flick_away": function(self,sm,event,response) {
+				// stop the animation and return to normal
+				self.animation_steps = 0;
 			},
 		},
 	},
@@ -174,44 +217,57 @@ return {
  * day number of one from that of the other, or there are simpler formulae
  * giving (for instance) the number of days since December 31, 1899.
  */
-	"draw_moon": function(response) {
-		var ymd = localization_snprintf("%04d-%02d-%02d",
-			common.year, common.month+1, common.date);
-
+	"update_moon": function() {
 		var jd = this.julian(common.year, common.month+1, common.date);
 		var newmoon = this.julian(1900, 1, 1);
 		var delta = jd - newmoon;
-		var lunar_len = 29.53059;
-		var lunar_month = Math.floor(delta / lunar_len);
-		var lunar_day = delta - (lunar_month * lunar_len);
+		var lunar_month_len = 29.53059;
+		var lunar_month = Math.floor(delta / lunar_month_len);
+		var lunar_day = delta - (lunar_month * lunar_month_len);
 
-		// we have 24 lunar images instead of 29, so scale it
-		var moon_image = Math.floor(lunar_day * 24 / lunar_len);
-
-		// update the hour hand position
-		var hour_int = common.hour;
-		var hour_frac = hour_int + common.minute / 60;
-		var hour_str = localization_snprintf("%02d", hour_int);
-		var hour = this.hour_coords(90, hour_int);
+		// we have 24 lunar images instead of 29, so scale it and store the global
+		this.moon_image = Math.floor(lunar_day * 24 / lunar_month_len);
 
 		// update the solar information; how to get the lat/lon?
 		var lat = 52.3676;
 		var lon = 4.9041;
 		var tz = common.time_zone_local;
-		var solar = this.solar_noon(common.year, common.month+1, common.date, hour_frac, lat, lon, tz);
+		var hour_frac = common.hour + common.minute / 60;
 
-		var sunrise = this.hour_coords(110, solar.sunrise);
-		var noon = this.hour_coords(105, solar.noon);
-		var sunset = this.hour_coords(110, solar.sunset);
+		this.solar = this.solar_noon(
+			common.year,
+			common.month+1,
+			common.date,
+			hour_frac,
+			lat,
+			lon,
+			tz
+		);
+	},
+
+	"draw_moon": function(response, full) {
+		if (!this.solar)
+			this.update_moon();
+
+		var ymd = localization_snprintf("%04d-%02d-%02d",
+			common.year, common.month+1, common.date);
+
+		var sunrise = this.hour_coords(110, this.solar.sunrise);
+		var noon = this.hour_coords(105, this.solar.noon);
+		var sunset = this.hour_coords(110, this.solar.sunset);
+
+		var hour_int = common.hour;
+		var hour_str = localization_snprintf("%02d", hour_int);
+		var hour = this.hour_coords(90, hour_int);
 
 		response.draw = {
-			"update_type": 'du4', // full.	gu4 == partial
+			"update_type": full ? 'gu4' : 'du4'
 		};
 		response.draw[this.node_name] = {
 			layout_function: "layout_parser_json",
 			layout_info: {
 				json_file: 'timer_layout',
-				moon_phase: 'moon_' + moon_image,
+				moon_phase: 'moon_' + this.moon_image,
 
 				// date, away from the hour hand
 				date: ymd,
