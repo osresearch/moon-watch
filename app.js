@@ -88,8 +88,7 @@ return {
 		"draw_hands": {
 			"entry": function(self,state_machine,event,response) {
 				enable_time_telling();
-				start_timer(self.node_name, 'timer_tick', 100);
-
+				start_timer(self.node_name, 'timer_tick', 200);
 			},
 			"exit": function(self,state_machine,event,response) {
 				stop_timer(self.node_name, 'timer_tick');
@@ -262,7 +261,12 @@ return {
 
 		var hour_int = common.hour;
 		var hour_str = localization_snprintf("%02d", hour_int);
-		var hour = this.hour_coords(65, hour_int);
+		var hour = this.hour_coords(62, hour_int);
+
+		// this assumes that sunrise and sunset are on opposite sides of the
+		// watch face.  it would be easier if we had a line draw function...
+		var leftcover_y = this.hour_coords(120, this.solar.sunrise).y;
+		var rightcover_y = this.hour_coords(120, this.solar.sunset).y;
 
 		response.draw = {
 			"update_type": full ? 'gu4' : 'du4'
@@ -287,8 +291,14 @@ return {
 				sunrise_y: sunrise.y - 5,
 				sunset_x: sunset.x - 5,
 				sunset_y: sunset.y - 5,
-				noon_x: noon.x - 8,
-				noon_y: noon.y - 8,
+				noon_x: noon.x - 10,
+				noon_y: noon.y - 10,
+
+				// covers for the sunlight ring
+				leftcover_y: leftcover_y,
+				leftcover_h: 240 - leftcover_y,
+				rightcover_y: rightcover_y,
+				rightcover_h: 240 - rightcover_y,
 			},
 		};
 	},

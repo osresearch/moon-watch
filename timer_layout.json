@@ -22,6 +22,63 @@
         "id": 1,
         "parent_id": 0,
         "type": "image",
+        "image_name": "ring",
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 240,
+            "height": 240
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 0,
+            "top": 0
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 2,
+        "parent_id": 0,
+        "type": "solid",
+	"color": 0,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 120,
+            "height": "#leftcover_h"
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 0,
+            "top": "#leftcover_y"
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 3,
+        "parent_id": 0,
+        "type": "solid",
+	"color": 0,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 120,
+            "height": "#rightcover_h"
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 120,
+            "top": "#rightcover_y"
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 4,
+        "parent_id": 0,
+        "type": "image",
         "image_name": "#moon_phase",
         "is_translate": false,
         "dimension": {
@@ -38,7 +95,7 @@
         "inversion": false
     },
     {
-        "id": 2,
+        "id": 5,
         "parent_id": 0,
         "type": "text",
         "text": "#date",
@@ -59,7 +116,7 @@
         "inversion": false
     },
     {
-        "id": 3,
+        "id": 6,
         "parent_id": 0,
         "type": "text",
         "text": "#hour",
@@ -80,7 +137,7 @@
         "inversion": false
     },
     {
-        "id": 4,
+        "id": 7,
         "parent_id": 0,
 	"color": 2,
         "type": "solid",
@@ -101,7 +158,7 @@
         "inversion": false
     },
     {
-        "id": 5,
+        "id": 8,
         "parent_id": 0,
         "type": "solid",
 	"text": "v",
@@ -122,17 +179,15 @@
         "inversion": false
     },
     {
-        "id": 6,
+        "id": 9,
         "parent_id": 0,
-        "type": "solid",
-	"text": "x",
-	"color": 3,
-	"ppem": 10,
+        "type": "image",
+	"image_name": "sun",
         "is_translate": false,
         "dimension": {
             "type": "rigid",
-            "width": 16,
-            "height": 16
+            "width": 20,
+            "height": 20
         },
         "placement": {
             "type": "absolute",

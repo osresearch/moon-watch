@@ -36,6 +36,8 @@ endef
 $(call icon, icHome, home.png, 14, 14)
 $(call icon, !icon_lg, time.png, 44, 44) # When selected
 $(call icon, !icon_sm, moon.png, 44, 44) # Unselected in the menu
+$(call icon, ring, ring.png, 240, 240)
+$(call icon, sun, sun.png, 20, 20)
 $(call icon, moon_0, images/moon-0_0.png, 160, 160)
 $(call icon, moon_1, images/moon-0_1.png, 160, 160)
 $(call icon, moon_2, images/moon-0_2.png, 160, 160)
@@ -63,18 +65,6 @@ $(call icon, moon_23, images/moon-5_3.png, 160, 160)
 
 layouts += timer_layout
 
-# Generate a new icon every build so that it is easy to see if the upload worked
-time.png: $(source_file)
-	convert \
-		-size 420x420 \
-		-background black \
-		-fill white \
-		-gravity center \
-		-pointsize 200 \
-		label:'$(shell date "+%H\n%M")' \
-		PNG32:$@
-
-
 compile: $(snapshot_file)
 
 build/files/layout/%: %.json
@@ -96,6 +86,18 @@ build_files += build/files/config
 build_files += $(foreach L,$(layouts),build/files/layout/$L)
 build_files += $(icons)
 build_files += $(snapshot_file)
+
+# Generate a new icon every build so that it is easy to see if the upload worked
+time.png: $(source_file) $(filter-out build/files/icons/!icon_lg,$(build_files))
+	convert \
+		-size 420x420 \
+		-background black \
+		-fill white \
+		-gravity center \
+		-pointsize 200 \
+		label:'$(shell date "+%H\n%M")' \
+		PNG32:$@
+
 
 $(snapshot_file): $(source_file) $(json_file)
 	@mkdir -p $(dir $@)
