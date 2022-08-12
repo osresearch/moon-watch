@@ -257,7 +257,7 @@ return {
 
 		var hour_int = common.hour;
 		var hour_str = localization_snprintf("%02d", hour_int);
-		var hour = this.hour_coords(62, hour_int);
+		var hour = this.hour_coords(75, hour_int);
 
 		// this assumes that sunrise and sunset are on opposite sides of the
 		// watch face.  it would be easier if we had a line draw function...

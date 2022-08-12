@@ -27,9 +27,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="9.5958333"
-     inkscape:cx="120"
-     inkscape:cy="94.989145"
+     inkscape:zoom="9.5060947"
+     inkscape:cx="121.13281"
+     inkscape:cy="121.13281"
      inkscape:window-width="3840"
      inkscape:window-height="2506"
      inkscape:window-x="0"
@@ -42,17 +42,19 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <circle
-       style="fill:none;stroke:#808080;stroke-width:2.91041667;stroke-miterlimit:10;stroke-dasharray:none"
+    <ellipse
+       style="fill:none;stroke:#808080;stroke-width:2.8832;stroke-miterlimit:10;stroke-dasharray:none"
        id="path2509"
-       cx="31.75"
-       cy="31.75"
-       r="30.594515" />
+       cx="32"
+       cy="31.749998"
+       rx="30.308401"
+       ry="30.308397" />
     <g
        id="g13882"
-       transform="matrix(0.90527814,0,0,0.90527814,2.3469745,2.050605)">
+       transform="matrix(0.90527814,0,0,0.90527814,2.3469745,2.050605)"
+       style="stroke-width:1.1690698;stroke-dasharray:none">
       <path
-         style="fill:none;stroke:#000000;stroke-width:1.05833;stroke-miterlimit:10;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:1.1690698;stroke-miterlimit:10;stroke-dasharray:none"
          d="M -2.5925452,32.806928 H 67.551643"
          id="path8641"
          inkscape:tile-cx="32.479548"
@@ -62,7 +64,7 @@
          inkscape:tile-x0="-2.5925452"
          inkscape:tile-y0="32.542344" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:1.05833;stroke-miterlimit:10;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:1.1690698;stroke-miterlimit:10;stroke-dasharray:none"
          d="M -1.3974926,41.884254 66.35659,23.729602"
          id="path13814"
          inkscape:tile-cx="32.479548"
@@ -72,7 +74,7 @@
          inkscape:tile-x0="-2.5925452"
          inkscape:tile-y0="32.542344" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:1.05833;stroke-miterlimit:10;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:1.1690698;stroke-miterlimit:10;stroke-dasharray:none"
          d="M 2.1062244,50.342975 62.852873,15.270881"
          id="path13816"
          inkscape:tile-cx="32.479548"
@@ -82,7 +84,7 @@
          inkscape:tile-x0="-2.5925452"
          inkscape:tile-y0="32.542344" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:1.05833;stroke-miterlimit:10;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:1.1690698;stroke-miterlimit:10;stroke-dasharray:none"
          d="M 7.6798334,57.606644 57.279264,8.0072125"
          id="path13818"
          inkscape:tile-cx="32.479548"
@@ -92,7 +94,7 @@
          inkscape:tile-x0="-2.5925452"
          inkscape:tile-y0="32.542344" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:1.05833;stroke-miterlimit:10;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:1.1690698;stroke-miterlimit:10;stroke-dasharray:none"
          d="M 14.943502,63.180252 50.015596,2.4336037"
          id="path13820"
          inkscape:tile-cx="32.479548"
@@ -102,7 +104,7 @@
          inkscape:tile-x0="-2.5925452"
          inkscape:tile-y0="32.542344" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:1.05833;stroke-miterlimit:10;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:1.1690698;stroke-miterlimit:10;stroke-dasharray:none"
          d="M 23.402223,66.68397 41.556874,-1.0701132"
          id="path13822"
          inkscape:tile-cx="32.479548"
@@ -112,7 +114,7 @@
          inkscape:tile-x0="-2.5925452"
          inkscape:tile-y0="32.542344" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:1.05833;stroke-miterlimit:10;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:1.1690698;stroke-miterlimit:10;stroke-dasharray:none"
          d="M 32.479548,67.879022 V -2.2651657"
          id="path13824"
          inkscape:tile-cx="32.479548"
@@ -122,7 +124,7 @@
          inkscape:tile-x0="-2.5925452"
          inkscape:tile-y0="32.542344" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:1.05833;stroke-miterlimit:10;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:1.1690698;stroke-miterlimit:10;stroke-dasharray:none"
          d="M 41.556875,66.68397 23.402222,-1.070113"
          id="path13826"
          inkscape:tile-cx="32.479548"
@@ -132,7 +134,7 @@
          inkscape:tile-x0="-2.5925452"
          inkscape:tile-y0="32.542344" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:1.05833;stroke-miterlimit:10;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:1.1690698;stroke-miterlimit:10;stroke-dasharray:none"
          d="M 50.015595,63.180252 14.943502,2.4336036"
          id="path13828"
          inkscape:tile-cx="32.479548"
@@ -142,7 +144,7 @@
          inkscape:tile-x0="-2.5925452"
          inkscape:tile-y0="32.542344" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:1.05833;stroke-miterlimit:10;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:1.1690698;stroke-miterlimit:10;stroke-dasharray:none"
          d="M 57.279264,57.606644 7.6798327,8.0072133"
          id="path13830"
          inkscape:tile-cx="32.479548"
@@ -152,7 +154,7 @@
          inkscape:tile-x0="-2.5925452"
          inkscape:tile-y0="32.542344" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:1.05833;stroke-miterlimit:10;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:1.1690698;stroke-miterlimit:10;stroke-dasharray:none"
          d="M 2.1062244,15.270881 62.852873,50.342975"
          id="path13832"
          inkscape:tile-cx="32.479548"
@@ -162,7 +164,7 @@
          inkscape:tile-x0="-2.5925452"
          inkscape:tile-y0="32.542344" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:1.05833;stroke-miterlimit:10;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:1.1690698;stroke-miterlimit:10;stroke-dasharray:none"
          d="M -1.3974926,23.729602 66.35659,41.884254"
          id="path13834"
          inkscape:tile-cx="32.479548"
