@@ -113,18 +113,7 @@ return {
 			},
 
 			"middle_short_press_release": function(self,sm,event,response) {
-				response.action = {
-					type: 'go_back',
-					Se: true, // kill the app
-				};
-			},
-			"top_press": function(self,state_machine,event,response) {
-				// move the hands a bit
-				response.move = {
-					h: 10,
-					m: -3,
-					is_relative: true,
-				};
+				sm.new_state('text_display');
 			},
 			"bottom_press": function(self,state_machine,event,response) {
 				// move the hands a bit
@@ -135,7 +124,27 @@ return {
 				};
 			},
 			"flick_away": function(self,sm,event,response) {
-				sm.new_state('animate_moon');
+				//sm.new_state('animate_moon');
+			},
+		},
+
+		"text_display": {
+			"entry": function(self,sm,event,response) {
+				disable_time_telling();
+				start_timer(self.node_name, 'timer_tick', 200);
+			},
+			"middle_short_press_release": function(self,sm,event,response) {
+				sm.new_state("draw_hands");
+			},
+			"timer_expired": function(self,state_machine,event,response) {
+				response.move = {
+					h: -90,
+					m: +90,
+					is_relative: false
+				};
+				self.update_moon();
+				self.draw_text(response);
+				//start_timer(self.node_name, 'timer_tick', 60*1000);
 			},
 		},
 
@@ -300,6 +309,47 @@ return {
 				leftcover_h: 240 - leftcover_y,
 				rightcover_y: rightcover_y,
 				rightcover_h: 240 - rightcover_y,
+			},
+		};
+	},
+
+	"draw_text": function(response)
+	{
+		var ymd = localization_snprintf("%04d-%02d-%02d",
+			common.year, common.month+1, common.date);
+		var hms = localization_snprintf("%02d:%02d",
+			common.hour, common.minute);
+
+		var floor = Math.floor;
+		var frac = function(x) { return floor(60*(x - floor(x))) };
+
+		var sunrise = localization_snprintf("%02d:%02d",
+			floor(this.solar.sunrise),
+			frac(this.solar.sunrise));
+		var sunset = localization_snprintf("%02d:%02d",
+			floor(this.solar.sunset),
+			frac(this.solar.sunset));
+		var moonrise = localization_snprintf("%02d:%02d",
+			floor(this.solar.moonrise),
+			frac(this.solar.moonrise));
+		var moonset = localization_snprintf("%02d:%02d",
+			floor(this.solar.moonset),
+			frac(this.solar.moonset));
+
+		response.draw = {
+			"update_type": 'gu4',
+		};
+		response.draw[this.node_name] = {
+			layout_function: "layout_parser_json",
+			layout_info: {
+				json_file: 'text_layout',
+
+				date: ymd,
+				time: hms,
+				sunrise: sunrise,
+				sunset: sunset,
+				moonrise: moonrise,
+				moonset: moonset,
 			},
 		};
 	},
