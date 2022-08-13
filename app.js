@@ -113,7 +113,7 @@ return {
 			},
 
 			"middle_short_press_release": function(self,sm,event,response) {
-				sm.new_state('text_display');
+				sm.new_state('stopwatch');
 			},
 			"bottom_press": function(self,state_machine,event,response) {
 				// move the hands a bit
@@ -127,6 +127,97 @@ return {
 				//sm.new_state('animate_moon');
 			},
 		},
+
+		"stopwatch": {
+			"entry": function(self,sm,event,response) {
+				if (!self.stopwatch)
+				{
+					self.stopwatch = {
+						timing: false,
+						total: 0,
+						lap: 0,
+						lap_start: 0,
+						start_milis: 0,
+					};
+				}
+
+				// always redraw on entry
+				self.stopwatch.force_redraw = true;
+
+				start_timer(self.node_name, 'timer_tick', 50);
+			},
+			"exit": function(self)
+			{
+				stop_timer(self.node_name, 'timer_tick');
+			},
+			"timer_expired": function(self,state_machine,event,response) {
+				if (!is_this_timer_expired(event, self.node_name, 'timer_tick'))
+					return;
+
+				// accumulate time if we are timing
+				if (self.stopwatch.timing)
+				{
+					var n = now();
+					self.stopwatch.total += (n - self.stopwatch.start_milis);
+					self.stopwatch.start_milis = n;
+				} else
+				if (!self.stopwatch.force_redraw)
+					return;
+
+				// jump hand for the minute hand
+				var total_sec = self.stopwatch.total / 1000;
+				var sec_angle = 360 * (total_sec % 60) / 60;
+				var hour_angle = 360 * Math.floor(total_sec / 60) / 12;
+
+				response.move = {
+					h: hour_angle,
+					m: sec_angle,
+					is_relative: false,
+				};
+
+				// only do a redraw if we are paused or forced
+				if (!self.stopwatch.timing || self.stopwatch.force_redraw)
+					self.draw_stopwatch(response);
+
+				// update the hands once per second while timing
+				if (self.stopwatch.timing)
+					start_timer(self.node_name, 'timer_tick', 1000);
+			},
+			"top_press": function(self,state_machine,event,response) {
+				// start/stop the timer
+				if (self.stopwatch.timing)
+				{
+					// copy the accrued time to the total counter
+					self.stopwatch.total += now() - self.stopwatch.start_milis;
+					self.stopwatch.timing = false;
+				} else {
+					self.stopwatch.start_milis = now();
+					self.stopwatch.timing = true;
+				}
+
+				// trigger an immediate redraw
+				start_timer(self.node_name, 'timer_tick', 50);
+				self.stopwatch.force_redraw = true;
+			},
+			"bottom_press": function(self,state_machine,event,response) {
+				if (self.stopwatch.timing)
+				{
+					// if timing, trigger a lap time
+					// lap not yet implemented.
+				} else {
+					// if not timing, reset everything
+					self.stopwatch.total = 0;
+				}
+
+				// trigger an immediate redraw
+				start_timer(self.node_name, 'timer_tick', 50);
+				self.stopwatch.force_redraw = true;
+			},
+			"middle_short_press_release": function(self,state_machine,event,response) {
+				state_machine.new_state("text_display");
+			},
+		},
+
 
 		"text_display": {
 			"entry": function(self,sm,event,response) {
@@ -372,6 +463,35 @@ return {
 		if (deg > 360)
 			deg -= 360;
 		return localization_snprintf("%3d°", deg);
+	},
+
+	"draw_stopwatch": function(response) {
+		this.stopwatch.force_redraw = false;
+
+		var total = this.stopwatch.total;
+		var ms = total % 1000;
+		total = Math.floor(total / 1000);
+		var sec = total % 60;
+		total = Math.floor(total / 60);
+		var min = total;
+		
+		var total_str = localization_snprintf("%02d:%02d.%03d", min, sec, ms);
+		var mode_str = this.stopwatch.timing ? "RUN" : "PAUSED";
+
+		response.draw = {
+			"update_type": 'gu4',
+		};
+		response.draw[this.node_name] = {
+			layout_function: "layout_parser_json",
+			layout_info: {
+				json_file: 'stopwatch_layout',
+
+				total: total_str,
+				total_color: this.stopwatch.timing ? 1 : 3,
+				mode: mode_str,
+				lap: "lap",
+			},
+		};
 	},
 
 /*

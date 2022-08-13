@@ -1,0 +1,84 @@
+[
+    {
+      "id": 0,
+      "type": "container",
+      "direction": 1,
+      "main_alignment": 0,
+      "cross_alignment": 1,
+      "dimension": {
+        "type": "rigid",
+        "width": 240,
+        "height": 240
+      },
+      "placement": {
+        "type": "absolute",
+        "left": 0,
+        "top": 0
+      },
+      "visible": true,
+      "inversion": false
+    },
+    {
+        "id": 1,
+        "parent_id": 0,
+        "type": "text",
+        "text": "#mode",
+	"color": 2,
+	"ppem": 20,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 160,
+            "height": 60
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 80,
+            "top": 30
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 2,
+        "parent_id": 0,
+        "type": "text",
+        "text": "#total",
+	"color": "#total_color",
+	"ppem": 45,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 160,
+            "height": 60
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 30,
+            "top": 90
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 3,
+        "parent_id": 0,
+        "type": "text",
+        "text": "#lap",
+	"color": 3,
+	"ppem": 20,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 120,
+            "height": 20
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 80,
+            "top": 140
+        },
+        "visible": true,
+        "inversion": false
+    }
+]

@@ -68,6 +68,7 @@ $(call icon, moon_23, images/moon-5_3.png, 160, 160)
 
 layouts += moonphase_layout
 layouts += text_layout
+layouts += stopwatch_layout
 
 compile: $(snapshot_file)
 
