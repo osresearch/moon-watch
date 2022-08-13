@@ -235,7 +235,9 @@ return {
 				};
 				self.update_moon();
 				self.draw_text(response);
-				//start_timer(self.node_name, 'timer_tick', 60*1000);
+
+				// update once per minute
+				start_timer(self.node_name, 'timer_tick', 60*1000);
 			},
 		},
 
