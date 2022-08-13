@@ -189,8 +189,9 @@ return {
 
 		var hands = enable_time_telling();
 
-		// put 12 at the top
-		var degrees_hour = 360 * (hour + minute/60 + 12) / 24;
+		// put 12 at the top, with a "jump hour" that doesn't include the minutes
+		//var degrees_hour = 360 * (hour + minute/60 + 12) / 24;
+		var degrees_hour = 360 * (hour + 12) / 24;
 		var degrees_minute = hands.minute_pos;
 
 		// pre-wrap the hour hand
@@ -238,6 +239,12 @@ return {
 		var sun = this.suncalc.getTimes(jd, lat, lon, alt);
 		var moon = this.suncalc.getMoonTimes(jd, lat, lon);
 		var phase = this.suncalc.getMoonIllumination(jd).phase;
+
+		// call back into the library to get the moon position for the rise and set times
+		this.lunar = {
+			rise: this.suncalc.getMoonPosition(moon.rise, lat, lon),
+			set: this.suncalc.getMoonPosition(moon.set, lat, lon),
+		};
 
 		// we have 24 lunar images, so scale the phase (0-1.0) and store the global
 		this.moon_image = Math.floor(phase * 24);
@@ -296,8 +303,8 @@ return {
 				sunrise_y: sunrise.y - 8,
 				sunset_x: sunset.x - 6,
 				sunset_y: sunset.y - 8,
-				noon_x: noon.x - 10,
-				noon_y: noon.y - 10,
+				noon_x: noon.x - 12,
+				noon_y: noon.y - 12,
 
 				moonrise_x: moonrise.x - 24/2,
 				moonrise_y: moonrise.y - 24/2,
@@ -350,8 +357,21 @@ return {
 				sunset: sunset,
 				moonrise: moonrise,
 				moonset: moonset,
+				//moonrise_heading: localization_snprintf("%.0f°", this.lunar.rise.azimuth * 180 / Math.PI ),
+				//moonset_heading: localization_snprintf("%.0f°", this.lunar.set.azimuth * 180 / Math.PI ),
+				moonrise_heading: this.heading_str(this.lunar.rise.azimuth),
+				moonset_heading: this.heading_str(this.lunar.set.azimuth),
 			},
 		};
+	},
+
+	"heading_str": function(rad) {
+		var deg = rad * 180 / Math.PI;
+		if (deg < 0)
+			deg += 360;
+		if (deg > 360)
+			deg -= 360;
+		return localization_snprintf("%3d°", deg);
 	},
 
 /*

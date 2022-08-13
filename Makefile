@@ -37,7 +37,7 @@ $(call icon, icHome, images/home.png, 14, 14)
 $(call icon, !icon_lg, build/time.png, 44, 44) # When selected
 $(call icon, !icon_sm, images/moon.png, 44, 44) # Unselected in the menu
 $(call icon, ring, images/ring.png, 240, 240)
-$(call icon, sun, images/sun.png, 20, 20)
+$(call icon, sun, images/sun.png, 24, 24)
 $(call icon, circle, images/circle.png, 16, 16)
 $(call icon, moonrise, images/moonrise.png, 24, 24)
 $(call icon, moonset, images/moonset.png, 24, 24)
