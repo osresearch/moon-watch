@@ -282,9 +282,8 @@ return {
 
 		var hands = enable_time_telling();
 
-		// put 12 at the top, with a "jump hour" that doesn't include the minutes
-		//var degrees_hour = 360 * (hour + minute/60 + 12) / 24;
-		var degrees_hour = 360 * (hour + 12) / 24;
+		// put 12 at the top
+		var degrees_hour = 360 * (hour + minute/60 + 12) / 24;
 		var degrees_minute = hands.minute_pos;
 
 		// pre-wrap the hour hand
@@ -346,6 +345,8 @@ return {
 			noon: (sun.solarNoon - jd) * 24 + tz/60,
 			sunrise: (sun.sunrise - jd) * 24 + tz/60,
 			sunset: (sun.sunset - jd) * 24 + tz/60,
+			dawn: (sun.dawn - jd) * 24 + tz/60,
+			dusk: (sun.dusk - jd) * 24 + tz/60,
 			moonrise: (moon.rise - jd) * 24 + tz/60,
 			moonset: (moon.set - jd) * 24 + tz/60,
 		};
@@ -358,9 +359,10 @@ return {
 		var ymd = localization_snprintf("%04d-%02d-%02d",
 			common.year, common.month+1, common.date);
 
+		// put the markers on dawn and dusk, instead of sunrise/sunset
 		var noon = this.hour_coords(108, this.solar.noon);
-		var sunrise = this.hour_coords(112, this.solar.sunrise);
-		var sunset = this.hour_coords(112, this.solar.sunset);
+		var sunrise = this.hour_coords(112, this.solar.dawn);
+		var sunset = this.hour_coords(112, this.solar.dusk);
 		var moonrise = this.hour_coords(105, this.solar.moonrise);
 		var moonset = this.hour_coords(105, this.solar.moonset);
 
