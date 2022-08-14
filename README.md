@@ -2,21 +2,27 @@
 
 ![Moon phase watch in an early form](images/moonwatch.jpg)
 
-This is an application to demonstrate a moderately complicated watch face with image drawing
-and some practical functions.
+This is an application for the Skagen/Fossil Hybrid watch to demonstrate
+a moderately complicated watch face with image drawing
+and some practical functions.  It's been tested on the Skagen Gen 6,
+sold in some markets as the SKT3200 (metal band) or SKT3201 (brown band).
 
 The watch shows several celestial datapoints:
 
 * the hour hand rotates once per day, with noon at the top
 * the current hour is prominently displayed near the hour hand
 * the current phase of the moon is large in the center
-* the local sunrise and sunset times are marked with small circles
+* the local dawn and dusk times are marked with small circles
 * the local solar noon has a small sun icon
-* the daylight hours have an arc along the outside
+* the daylight hours between sunrise and sunset have an arc along the outside
 * there are grid bars every to help estimate daylight remaining
 * the upcoming moon rise and set times are marked with small icons
 
-If you do a quick wrist flip it will animate all of the moon phases.
+The middle button cycles through the modes:
+
+* Moon phase
+* Stop watch (top button to start and stop, bottom button to reset)
+* Numeric display of solar and lunar event times and headings
 
 
 ## Building
@@ -39,6 +45,15 @@ python3 tools/build.py \
 You as well as the [Fossil-HR-SDK](https://github.com/dakhnod/Fossil-HR-SDK/blob/main/DOCUMENTATION.md),
 which has the tools to build and pack the `wapp` files to install via [GadgetBridge](https://gadgetbridge.org/).  As of 2022-08-12, the gen6 support is not yet in mainline, so you will need to build
 with [PR#2775](https://codeberg.org/Freeyourgadget/Gadgetbridge/pulls/2775) to detect the newer watches.
+Also note that there are [special paring instructions for the Fossil/Skagen HR](https://codeberg.org/Freeyourgadget/Gadgetbridge/wiki/Fossil-Hybrid-HR)
+that require an authorization key to be retrieved from the OEM's servers.
+
+If these are installed and your watch paired, you *should* be able to run
+`make` and have it build the `build/stopwatchApp.wapp` file and use `adb`
+to push it to your Android phone running GadgetBridge, which *should*
+install it to the watch.  There's lots of issues here, so it might
+require some hacking or manual steps. Sorry, I haven't figured out how to
+do this reliably yet either.
 
 
 ## Images
