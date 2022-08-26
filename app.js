@@ -308,15 +308,11 @@ return {
 
 	// from wikipedia: https://en.wikipedia.org/wiki/Julian_day#Converting_Gregorian_calendar_date_to_Julian_Day_Number
 	// all division is "round towards zero"
-	"julian": function(y,m,d) {
-		var m14 = Math.round((m-14)/12);
-		return (
-			+ Math.round((1461 * (y + 4800 + m14))/4)
-			+ Math.round((367 * (m - 2 - 12 * m14))/12)
-			- Math.round(3 * Math.round((y + 4900 + m14)/100)/4)
-			+ d
-			- 32075
-		);
+	"julian": function(Year,Month,Day) {
+		var a = Math.floor((14 - Month) / 12)
+		var y = Year + 4800 - a
+		var m = Month + 12 * a - 3
+		return Day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
 	},
 
 	"update_moon": function() {
