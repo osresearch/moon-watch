@@ -379,24 +379,26 @@ return {
 
 		var hour_int = common.hour;
 		var hour_str = localization_snprintf("%02d", hour_int);
-		var hour = this.hour_coords(75, hour_int);
+		var hour = this.hour_coords(68, hour_int);
 
 		var minute = common.minute;
 		var hour2_int = -1;
 		var hour2_str = "";
 		var hour2 = hour;
 
-		if (minute < 15)
+		if (minute < 5)
+		{
 			hour2_int = (hour_int + 24 - 1) % 24;
-		else
-		if (minute > 45)
+			hour2 = this.hour_coords(72, hour2_int - 0.75);
+		} else
+		if (minute >= 40)
+		{
 			hour2_int = (hour_int + 1) % 24;
+			hour2 = this.hour_coords(72, hour2_int + 0.75);
+		}
 
 		if (hour2_int != -1)
-		{
 			hour2_str = localization_snprintf("%02d", hour2_int);
-			hour2 = this.hour_coords(75, hour2_int);
-		}
 
 		// this assumes that sunrise and sunset are on opposite sides of the
 		// watch face.  it would be easier if we had a line draw function...
@@ -418,13 +420,13 @@ return {
 
 				// hour hand label (attempt to center)
 				hour: hour_str,
-				hour_x: hour.x - 10,
-				hour_y: hour.y + 15,
+				hour_x: hour.x - 32/3,
+				hour_y: hour.y - 32/2,
 
 				// next or previous hour in a faint font
 				hour2: hour2_str,
-				hour2_x: hour2.x - 10,
-				hour2_y: hour2.y + 15,
+				hour2_x: hour2.x - 5,
+				hour2_y: hour2.y - 10,
 
 				// solar data
 				sunrise_x: sunrise.x - 8,

@@ -120,8 +120,8 @@
         "parent_id": 0,
         "type": "text",
         "text": "#hour2",
-	"color": 1,
-	"ppem": 22,
+	"color": 2,
+	"ppem": 20,
         "is_translate": false,
         "dimension": {
             "type": "rigid",
@@ -142,7 +142,7 @@
         "type": "text",
         "text": "#hour",
 	"color": 3,
-	"ppem": 30,
+	"ppem": 32,
         "is_translate": false,
         "dimension": {
             "type": "rigid",
