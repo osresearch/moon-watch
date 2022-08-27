@@ -27,22 +27,17 @@ The middle button cycles through the modes:
 
 ## Building
 
-You will need to have built and installed [`jerryscript-2.1.0`](https://github.com/jerryscript-project/jerryscript/releases/tag/v2.1.0) (newer versions don't work?),
-preferably with options to enable line-number errors when compiling
+```
+sudo apt install jq
+make deps
+```
+
+This will built [`jerryscript-2.1.0`](https://github.com/jerryscript-project/jerryscript/releases/tag/v2.1.0) (newer versions don't work?),
+with options to enable line-number errors when compiling
 (otherwise it only outputs "`Syntax error`" with no information about
 where).
 
-```
-python3 tools/build.py \
-  --snapshot-exec=on \
-  --jerry-cmdline-snapshot=on \
-  --profile=es5.1 \
-  --error-messages=on \
-  --line-info=on \
-  --logging=on
-```
-
-You as well as the [Fossil-HR-SDK](https://github.com/dakhnod/Fossil-HR-SDK/blob/main/DOCUMENTATION.md),
+it will also download the current head of the [Fossil-HR-SDK](https://github.com/dakhnod/Fossil-HR-SDK/blob/main/DOCUMENTATION.md),
 which has the tools to build and pack the `wapp` files to install via [GadgetBridge](https://gadgetbridge.org/).  As of 2022-08-12, the gen6 support is not yet in mainline, so you will need to build
 with [PR#2775](https://codeberg.org/Freeyourgadget/Gadgetbridge/pulls/2775) to detect the newer watches.
 Also note that there are [special paring instructions for the Fossil/Skagen HR](https://codeberg.org/Freeyourgadget/Gadgetbridge/wiki/Fossil-Hybrid-HR)

@@ -1,14 +1,16 @@
-WATCH_SDK_PATH ?= ~/build/Fossil-HR-SDK/tools
-JERRYSCRIPT_PATH ?= ~/build/Fossil-HR-SDK/jerryscript-2.1.0/build/bin/
+JERRYSCRIPT_VERSION ?= 2.1.0
+WATCH_SDK_PATH ?= ./Fossil-HR-SDK
+JERRYSCRIPT_PATH ?= ./jerryscript-$(JERRYSCRIPT_VERSION)
 
 json_file := app.json
 source_file := app.js
 
 identifier := $(shell cat $(json_file) | jq -r '.identifier')
 snapshot_file := build/files/code/${identifier}
-tools_dir := $(if $(WATCH_SDK_PATH),$(WATCH_SDK_PATH),../../tools)
+tools_dir := $(WATCH_SDK_PATH)/tools
 image_compress := python3 $(tools_dir)/image_compress.py
 pack := python3 $(tools_dir)/pack.py
+snapshot := $(JERRYSCRIPT_PATH)/build/bin/jerry-snapshot
 
 package_file := build/${identifier}.wapp
 
@@ -106,7 +108,7 @@ build/time.png: $(source_file) $(filter-out build/files/icons/!icon_lg,$(build_f
 
 $(snapshot_file): $(source_file) $(json_file)
 	@mkdir -p $(dir $@)
-	$(JERRYSCRIPT_PATH)jerry-snapshot generate -f '' $< -o $@
+	$(snapshot) generate -f '' $< -o $@
 
 $(package_file): $(build_files)
 	$(pack) -i build/ -o $@
@@ -130,3 +132,25 @@ clean:
 	rm -rf build
 
 FORCE:
+
+deps: $(snapshot) $(tools_dir)/pack.py
+	pip3 install crc32c
+
+$(tools_dir)/pack.py:
+	git clone https://github.com/dakhnod/Fossil-HR-SDK
+
+build/jerryscript-$(JERRYSCRIPT_VERSION).tar.gz:
+	wget -O $@ https://github.com/jerryscript-project/jerryscript/archive/refs/tags/v$(JERRYSCRIPT_VERSION).tar.gz
+$(JERRYSCRIPT_PATH): build/jerryscript-$(JERRYSCRIPT_VERSION).tar.gz
+	tar zxf $<
+
+$(snapshot): $(JERRYSCRIPT_PATH)
+	cd $(JERRYSCRIPT_PATH) \
+	&& python3 tools/build.py \
+		--snapshot-exec=on \
+		--jerry-cmdline-snapshot=on \
+		--profile=es5.1 \
+		--error-messages=on \
+		--line-info=on \
+		--logging=on
+
