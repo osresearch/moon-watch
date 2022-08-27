@@ -101,8 +101,8 @@ return {
 				self.draw_moon(response, true);
 				self.draw_hands(response);
 
-				// schedule to redraw at the start of the next hour
-				var delay = (60 - common.minute) * 60 * 1000;
+				// schedule to redraw on 15-minute internvals
+				var delay = (15 - common.minute % 15) * 60 * 1000;
 				start_timer(self.node_name, 'timer_tick', delay);
 
 			},
@@ -308,15 +308,11 @@ return {
 
 	// from wikipedia: https://en.wikipedia.org/wiki/Julian_day#Converting_Gregorian_calendar_date_to_Julian_Day_Number
 	// all division is "round towards zero"
-	"julian": function(y,m,d) {
-		var m14 = Math.round((m-14)/12);
-		return (
-			+ Math.round((1461 * (y + 4800 + m14))/4)
-			+ Math.round((367 * (m - 2 - 12 * m14))/12)
-			- Math.round(3 * Math.round((y + 4900 + m14)/100)/4)
-			+ d
-			- 32075
-		);
+	"julian": function(Year,Month,Day) {
+		var a = Math.floor((14 - Month) / 12)
+		var y = Year + 4800 - a
+		var m = Month + 12 * a - 3
+		return Day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
 	},
 
 	"update_moon": function() {
@@ -363,12 +359,29 @@ return {
 		var noon = this.hour_coords(108, this.solar.noon);
 		var sunrise = this.hour_coords(112, this.solar.dawn);
 		var sunset = this.hour_coords(112, this.solar.dusk);
-		var moonrise = this.hour_coords(105, this.solar.moonrise);
-		var moonset = this.hour_coords(105, this.solar.moonset);
+		var moonrise = this.hour_coords(98, this.solar.moonrise);
+		var moonset = this.hour_coords(98, this.solar.moonset);
 
 		var hour_int = common.hour;
 		var hour_str = localization_snprintf("%02d", hour_int);
 		var hour = this.hour_coords(75, hour_int);
+
+		var minute = common.minute;
+		var hour2_int = -1;
+		var hour2_str = "";
+		var hour2 = hour;
+
+		if (minute < 15)
+			hour2_int = (hour_int + 24 - 1) % 24;
+		else
+		if (minute > 45)
+			hour2_int = (hour_int + 1) % 24;
+
+		if (hour2_int != -1)
+		{
+			hour2_str = localization_snprintf("%02d", hour2_int);
+			hour2 = this.hour_coords(75, hour2_int);
+		}
 
 		// this assumes that sunrise and sunset are on opposite sides of the
 		// watch face.  it would be easier if we had a line draw function...
@@ -376,7 +389,7 @@ return {
 		var rightcover_y = this.hour_coords(120, this.solar.sunset).y;
 
 		response.draw = {
-			"update_type": full ? 'gu4' : 'du4'
+			"update_type": full ? 'du4' : 'gu4'
 		};
 		response.draw[this.node_name] = {
 			layout_function: "layout_parser_json",
@@ -392,6 +405,11 @@ return {
 				hour: hour_str,
 				hour_x: hour.x - 10,
 				hour_y: hour.y + 15,
+
+				// next or previous hour in a faint font
+				hour2: hour2_str,
+				hour2_x: hour2.x - 10,
+				hour2_y: hour2.y + 15,
 
 				// solar data
 				sunrise_x: sunrise.x - 8,
