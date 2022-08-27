@@ -97,18 +97,23 @@ return {
 				if (!is_this_timer_expired(event, self.node_name, 'timer_tick'))
 					return;
 
+				// track minutes and seconds based on unix time,
+				// since it seems to disagree with common.minute?
+				self.update_time();
 				self.update_moon();
 				self.draw_moon(response, true);
 				self.draw_hands(response);
 
 				// schedule to redraw on 15-minute internvals
-				var delay = (15 - common.minute % 15) * 60 * 1000;
-				start_timer(self.node_name, 'timer_tick', delay);
+				var sec_past_quarter = self.second_past_hour % (60 * 15);
+				var delay_sec = 60 * 15 - sec_past_quarter;
 
+				start_timer(self.node_name, 'timer_tick', delay_sec * 1000);
 			},
 
 			// called every 20 seconds or so to update the hands
 			"time_telling_update": function(self,state_machine,event,response) {
+				self.update_time();
 				self.draw_hands(response);
 			},
 
@@ -276,15 +281,25 @@ return {
 		},
 	},
 
+	"update_time": function() {
+		var epoch = get_unix_time();
+		this.second = epoch % 60;
+		epoch = Math.floor(epoch / 60);
+		this.minute = epoch % 60;
+		epoch = Math.floor(epoch / 60);
+		this.hour = epoch % 24;
+
+		this.second_past_hour = this.minute * 60 + this.second;
+	},
+
 	"draw_hands": function(response) {
 		var hour = common.hour;
-		var minute = common.minute;
-
-		var hands = enable_time_telling();
+		var minute = this.minute;
+		var seconds = this.second;
 
 		// put 12 at the top
 		var degrees_hour = 360 * (hour + minute/60 + 12) / 24;
-		var degrees_minute = hands.minute_pos;
+		var degrees_minute = this.second_past_hour * 360 / 3600;
 
 		// pre-wrap the hour hand
 		if (degrees_hour > 360)
