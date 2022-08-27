@@ -251,5 +251,26 @@
         },
         "visible": true,
         "inversion": false
+    },
+    {
+        "id": 13,
+        "parent_id": 0,
+        "type": "text",
+        "text": "#min",
+	"color": 3,
+	"ppem": 20,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 40,
+            "height": 40
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 60,
+            "top": 60
+        },
+        "visible": false,
+        "inversion": false
     }
 ]

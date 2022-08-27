@@ -94,7 +94,7 @@ return {
 			"entry": function(self,state_machine,event,response) {
 				// we will do the hand and screen updates ourselves
 				//enable_time_telling();
-				self.last_quarter = -1;
+				self.last_minute = -1;
 				start_timer(self.node_name, 'timer_tick', 200);
 				self.log("entry called", "moonphase");
 			},
@@ -111,11 +111,19 @@ return {
 				self.update_time();
 
 				// every quarter hour update the screen
-				if (self.quarter != self.last_quarter)
+				var delay = 20 - (self.second % 20);
+				var redraw = self.minute != self.last_minute;
+				//self.log("quarter " + self.quarter + " " + self.last_quarter + " delay=" + delay, "timer");
+				self.log({
+					now: localization_snprintf("%02d:%02d:%02d", self.hour, self.minute, self.second),
+					redraw: redraw,
+					delay: self.delay,
+				}, "timer");
+
+				if (redraw)
 				{
 					//self.log(common.time_zone_local + " " + self.hour, "update");
-					//self.log(common, "common");
-					self.last_quarter = self.quarter;
+					self.last_minute = self.minute;
 					self.update_moon();
 					self.draw_moon(response, true);
 				}
@@ -128,8 +136,8 @@ return {
 
 				start_timer(self.node_name, 'timer_tick', delay_sec * 1000);
 */
-				// update hands every 20 seconds
-				start_timer(self.node_name, 'timer_tick', 20000);
+				// update hands every 20 seconds, on whole minutes
+				start_timer(self.node_name, 'timer_tick', delay * 1000);
 			},
 
 			// called every 20 seconds or so to update the hands
@@ -150,7 +158,7 @@ return {
 				};
 			},
 			"flick_away": function(self,sm,event,response) {
-				//sm.new_state('animate_moon');
+				sm.new_state('animate_moon');
 			},
 		},
 
@@ -270,30 +278,40 @@ return {
 		"animate_moon": {
 			// start the animation counter and reset the timer
 			"entry": function(self,sm,event,response) {
-				self.animation_steps = 24 * 3;
-				start_timer(self.node_name, 'timer_tick', 10);
+				disable_time_telling();
+				self.animation_steps = 8;
+				self.moon_image = 15;
+				start_timer(self.node_name, 'timer_tick', 200);
 			},
 			"timer_expired": function(self,sm,event,response) {
-				if (self.animation_steps-- == 0)
+				if (!is_this_timer_expired(event, self.node_name, 'timer_tick'))
+					return;
+
+				if (self.animation_steps == -1)
 				{
 					sm.new_state('draw_hands');
 					return;
 				}
 
-				start_timer(self.node_name, 'timer_tick', 60);
-
-				if ((self.animation_steps % 3) == 2)
+				if (self.animation_steps-- == 0)
 				{
-					self.moon_image = (self.moon_image + 1) % 24;
-					self.draw_moon(response, false);
+					// hold for a few seconds
+					start_timer(self.node_name, 'timer_tick', 2000);
+					return;
 				}
 
+				self.draw_moon(response, true);
+
+				var brightness = ((self.moon_image + 12) % 24) / 24 * 360;
 				response.move = {
-					h: 49,
-					m: -49,
-					is_relative: true,
+					h: brightness,
+					m: brightness,
+					is_relative: false,
 				};
 
+				self.moon_image = (self.moon_image + 3) % 24;
+
+				start_timer(self.node_name, 'timer_tick', 1000);
 			},
 			"flick_away": function(self,sm,event,response) {
 				// stop the animation and return to normal
@@ -400,24 +418,26 @@ return {
 		var moonrise = this.hour_coords(98, this.solar.moonrise);
 		var moonset = this.hour_coords(98, this.solar.moonset);
 
-		var hour_int = common.hour;
+		var hour_int = this.hour;
 		var hour_str = localization_snprintf("%02d", hour_int);
-		var hour = this.hour_coords(68, hour_int);
+		var hour = this.hour_coords(98, hour_int + 0.5);
 
-		var minute = common.minute;
 		var hour2_int = -1;
 		var hour2_str = "";
 		var hour2 = hour;
 
+		var minute = this.minute;
+		var min_str = localization_snprintf("%02d", minute);
+
 		if (minute < 5)
 		{
 			hour2_int = (hour_int + 24 - 1) % 24;
-			hour2 = this.hour_coords(72, hour2_int - 0.75);
+			hour2 = this.hour_coords(100, hour2_int + 0.5);
 		} else
 		if (minute >= 40)
 		{
 			hour2_int = (hour_int + 1) % 24;
-			hour2 = this.hour_coords(72, hour2_int + 0.75);
+			hour2 = this.hour_coords(100, hour2_int + 0.5);
 		}
 
 		if (hour2_int != -1)
@@ -441,15 +461,17 @@ return {
 				date: ymd,
 				date_y: common.hour > 18 || common.hour < 6 ? 40: 210,
 
-				// hour hand label (attempt to center)
+				// hour hand label (attempt to center with a 32pt font)
 				hour: hour_str,
-				hour_x: hour.x - 32/3,
-				hour_y: hour.y - 32/2,
+				hour_x: hour.x - 25,
+				hour_y: hour.y + 10,
 
 				// next or previous hour in a faint font
 				hour2: hour2_str,
-				hour2_x: hour2.x - 5,
-				hour2_y: hour2.y - 10,
+				hour2_x: hour2.x - 12,
+				hour2_y: hour2.y + 6,
+
+				min: min_str,
 
 				// solar data
 				sunrise_x: sunrise.x - 8,
