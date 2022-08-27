@@ -155,3 +155,5 @@ $(snapshot): $(JERRYSCRIPT_PATH)
 		--line-info=on \
 		--logging=on
 
+logs:
+	adb logcat -e "Unhandled request from watch"
