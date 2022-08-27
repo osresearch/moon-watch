@@ -119,6 +119,27 @@
         "id": 6,
         "parent_id": 0,
         "type": "text",
+        "text": "#hour2",
+	"color": 1,
+	"ppem": 22,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 40,
+            "height": 40
+        },
+        "placement": {
+            "type": "absolute",
+            "left": "#hour2_x",
+            "top": "#hour2_y"
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 7,
+        "parent_id": 0,
+        "type": "text",
         "text": "#hour",
 	"color": 3,
 	"ppem": 30,
@@ -137,7 +158,7 @@
         "inversion": false
     },
     {
-        "id": 7,
+        "id": 8,
         "parent_id": 0,
         "type": "image",
         "image_name": "circle",
@@ -156,7 +177,7 @@
         "inversion": false
     },
     {
-        "id": 8,
+        "id": 9,
         "parent_id": 0,
         "type": "image",
         "image_name": "circle",
@@ -175,7 +196,7 @@
         "inversion": false
     },
     {
-        "id": 9,
+        "id": 10,
         "parent_id": 0,
         "type": "image",
 	"image_name": "sun",
@@ -194,7 +215,7 @@
         "inversion": false
     },
     {
-        "id": 10,
+        "id": 11,
         "parent_id": 0,
         "type": "image",
         "image_name": "moonrise",
@@ -213,7 +234,7 @@
         "inversion": false
     },
     {
-        "id": 11,
+        "id": 12,
         "parent_id": 0,
         "type": "image",
         "image_name": "moonset",
