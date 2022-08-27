@@ -1,18 +1,19 @@
 JERRYSCRIPT_VERSION ?= 2.1.0
-WATCH_SDK_PATH ?= ./Fossil-HR-SDK
-JERRYSCRIPT_PATH ?= ./jerryscript-$(JERRYSCRIPT_VERSION)
+O ?= ./build
+WATCH_SDK_PATH ?= $O/Fossil-HR-SDK
+JERRYSCRIPT_PATH ?= $O/jerryscript-$(JERRYSCRIPT_VERSION)
 
 json_file := app.json
 source_file := app.js
 
 identifier := $(shell cat $(json_file) | jq -r '.identifier')
-snapshot_file := build/files/code/${identifier}
+snapshot_file := $O/files/code/${identifier}
 tools_dir := $(WATCH_SDK_PATH)/tools
-image_compress := python3 $(tools_dir)/image_compress.py
+image_compress := $(tools_dir)/image_compress.py
 pack := python3 $(tools_dir)/pack.py
 snapshot := $(JERRYSCRIPT_PATH)/build/bin/jerry-snapshot
 
-package_file := build/${identifier}.wapp
+package_file := $O/${identifier}.wapp
 
 adb_target := 192.168.0.192:5555
 adb_target_dir := /sdcard/Download
@@ -23,20 +24,20 @@ adb_target_file := $(adb_target_dir)/$(notdir $(package_file))
 all: build push install
 build: compile pack
 
-icon_dir := build/files/icons
+icon_dir := $O/files/icons
 
 define _icon
 icons += $(icon_dir)/$1
-$(icon_dir)/$1: $2
+$(icon_dir)/$1: $2 | $(image_compress)
 	@mkdir -p $(icon_dir)
-	$(image_compress) -f rle -o $$@ -i $$< -w $3 -h $4
+	python3 $(image_compress) -f rle -o $$@ -i $$< -w $3 -h $4
 endef
 define icon
 $(eval $(call _icon,$(strip $1),$(strip $2),$3,$4))
 endef
 
 $(call icon, icHome, images/home.png, 14, 14)
-$(call icon, !icon_lg, build/time.png, 44, 44) # When selected
+$(call icon, !icon_lg, $O/time.png, 44, 44) # When selected
 $(call icon, !icon_sm, images/moon.png, 44, 44) # Unselected in the menu
 $(call icon, ring, images/ring.png, 240, 240)
 $(call icon, sun, images/sun.png, 24, 24)
@@ -74,28 +75,28 @@ layouts += stopwatch_layout
 
 compile: $(snapshot_file)
 
-build/files/layout/%: %.json
+$O/files/layout/%: %.json
 	@mkdir -p $(dir $@)
 	cp $< $@
-build/app.json: $(json_file)
+$O/app.json: $(json_file)
 	@mkdir -p $(dir $@)
 	cp $< $@
-build/files/display_name/display_name: $(json_file)
+$O/files/display_name/display_name: $(json_file)
 	@mkdir -p $(dir $@)
 	jq -r '.display_name' $< > $@
-build/files/config:
+$O/files/config:
 	mkdir -p $@
 
 
-build_files += build/app.json
-build_files += build/files/display_name/display_name
-build_files += build/files/config
-build_files += $(foreach L,$(layouts),build/files/layout/$L)
+build_files += $O/app.json
+build_files += $O/files/display_name/display_name
+build_files += $O/files/config
+build_files += $(foreach L,$(layouts),$O/files/layout/$L)
 build_files += $(icons)
 build_files += $(snapshot_file)
 
 # Generate a new icon every build so that it is easy to see if the upload worked
-build/time.png: $(source_file) $(filter-out build/files/icons/!icon_lg,$(build_files))
+$O/time.png: $(source_file) $(filter-out $O/files/icons/!icon_lg,$(build_files))
 	convert \
 		-size 420x420 \
 		-background black \
@@ -106,12 +107,12 @@ build/time.png: $(source_file) $(filter-out build/files/icons/!icon_lg,$(build_f
 		PNG32:$@
 
 
-$(snapshot_file): $(source_file) $(json_file)
+$(snapshot_file): $(source_file) $(json_file) | $(snapshot)
 	@mkdir -p $(dir $@)
 	$(snapshot) generate -f '' $< -o $@
 
 $(package_file): $(build_files)
-	$(pack) -i build/ -o $@
+	$(pack) -i $O/ -o $@
 
 pack: $(package_file)
 push: $(package_file)
@@ -136,13 +137,13 @@ FORCE:
 deps: $(snapshot) $(tools_dir)/pack.py
 	pip3 install crc32c
 
-$(tools_dir)/pack.py:
-	git clone https://github.com/dakhnod/Fossil-HR-SDK
+$(image_compress):
+	cd $O && git clone https://github.com/dakhnod/Fossil-HR-SDK
 
-build/jerryscript-$(JERRYSCRIPT_VERSION).tar.gz:
+$O/jerryscript-$(JERRYSCRIPT_VERSION).tar.gz:
 	wget -O $@ https://github.com/jerryscript-project/jerryscript/archive/refs/tags/v$(JERRYSCRIPT_VERSION).tar.gz
-$(JERRYSCRIPT_PATH): build/jerryscript-$(JERRYSCRIPT_VERSION).tar.gz
-	tar zxf $<
+$(JERRYSCRIPT_PATH): $O/jerryscript-$(JERRYSCRIPT_VERSION).tar.gz
+	tar zxf $< -C $O
 
 $(snapshot): $(JERRYSCRIPT_PATH)
 	cd $(JERRYSCRIPT_PATH) \
