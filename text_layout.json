@@ -223,5 +223,47 @@
         },
         "visible": true,
         "inversion": false
+    },
+    {
+        "id": 11,
+        "parent_id": 0,
+        "type": "text",
+        "text": "#lat",
+	"color": 3,
+	"ppem": 16,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 120,
+            "height": 20
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 80,
+            "top": 200
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 12,
+        "parent_id": 0,
+        "type": "text",
+        "text": "#lon",
+	"color": 3,
+	"ppem": 16,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 120,
+            "height": 20
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 80,
+            "top": 215
+        },
+        "visible": true,
+        "inversion": false
     }
 ]

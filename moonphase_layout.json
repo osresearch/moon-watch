@@ -109,7 +109,7 @@
         },
         "placement": {
             "type": "absolute",
-            "left": 70,
+            "left": 100,
             "top": "#date_y"
         },
         "visible": true,

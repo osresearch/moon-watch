@@ -1,3 +1,8 @@
+# Location for sunrise/sunset and moonrise/moonset
+LAT ?= 52.3676
+LON ?= 4.9041
+ALT ?= 0.0000
+
 JERRYSCRIPT_VERSION ?= 2.1.0
 O ?= ./build
 WATCH_SDK_PATH ?= $O/Fossil-HR-SDK
@@ -128,6 +133,15 @@ install:
 	--es EXTRA_HANDLE APP_CODE \
 	--es EXTRA_PATH "$(adb_target_file)" \
 	--ez EXTRA_GENERATE_FILE_HEADER false
+
+
+# note the extra quotes due to shell forwarding!
+location:
+	adb shell am broadcast \
+	-a "nodomain.freeyourgadget.gadgetbridge.Q_PUSH_CONFIG" \
+	--es EXTRA_CONFIG_JSON \
+	\''{"push":{"set":{"stopwatchApp._.config.position":{"lat":$(LAT),"lon":$(LON),"alt":$(ALT)}}}}'\'
+
 
 clean:
 	rm -rf build

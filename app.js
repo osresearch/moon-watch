@@ -7,7 +7,13 @@ return {
 		"timers": ['select_tick', 'timer_tick']
 	},
 	"persist": {},
-	"config": {},
+	"config": {
+		"position": {
+			"lat": 52.3676,
+			"lon": 4.9041,
+			"alt": 0  // netherlands, right?
+		},
+	},
 	"animation_steps": 0,
 	"moon_image": 0,
 	"solar": null,
@@ -113,12 +119,6 @@ return {
 				// every quarter hour update the screen
 				var delay = 20 - (self.second % 20);
 				var redraw = self.minute != self.last_minute;
-				//self.log("quarter " + self.quarter + " " + self.last_quarter + " delay=" + delay, "timer");
-				self.log({
-					now: localization_snprintf("%02d:%02d:%02d", self.hour, self.minute, self.second),
-					redraw: redraw,
-					delay: self.delay,
-				}, "timer");
 
 				if (redraw)
 				{
@@ -323,10 +323,10 @@ return {
 	"update_time": function() {
 		var epoch = get_unix_time();
 		this.second = epoch % 60;
-		epoch = Math.floor(epoch / 60);
+		epoch = Math.floor(epoch / 60) + common.time_zone_local;
 		this.minute = epoch % 60;
 		epoch = Math.floor(epoch / 60);
-		this.hour = (epoch + common.time_zone_local / 60) % 24;
+		this.hour = epoch % 24;
 
 		// some commonly used values
 		this.second_past_hour = this.minute * 60 + this.second;
@@ -375,9 +375,10 @@ return {
 		var jd = this.julian(common.year, common.month+1, common.date);
 
 		// update the solar information; how to get the lat/lon?
-		var lat = 52.3676;
-		var lon = 4.9041;
-		var alt = 0; // netherlands, right?
+		var pos = this.config.position;
+		var lat = pos.lat;
+		var lon = pos.lon;
+		var alt = pos.alt;
 		var tz = common.time_zone_local;
 
 		var sun = this.suncalc.getTimes(jd, lat, lon, alt);
@@ -408,8 +409,8 @@ return {
 		if (!this.solar)
 			this.update_moon();
 
-		var ymd = localization_snprintf("%04d-%02d-%02d",
-			common.year, common.month+1, common.date);
+		var ymd = localization_snprintf("%02d-%02d",
+			common.month+1, common.date);
 
 		// put the markers on dawn and dusk, instead of sunrise/sunset
 		var noon = this.hour_coords(108, this.solar.noon);
@@ -459,7 +460,7 @@ return {
 
 				// date, away from the hour hand
 				date: ymd,
-				date_y: common.hour > 18 || common.hour < 6 ? 40: 210,
+				date_y: this.hour > 18 || this.hour < 6 ? 40: 215,
 
 				// hour hand label (attempt to center with a 32pt font)
 				hour: hour_str,
@@ -500,7 +501,7 @@ return {
 		var ymd = localization_snprintf("%04d-%02d-%02d",
 			common.year, common.month+1, common.date);
 		var hms = localization_snprintf("%02d:%02d",
-			common.hour, common.minute);
+			this.hour, this.minute);
 
 		var floor = Math.floor;
 		var frac = function(x) { return floor(60*(x - floor(x))) };
@@ -518,6 +519,16 @@ return {
 			floor(this.solar.moonset),
 			frac(this.solar.moonset));
 
+		var pos = this.config.position;
+		var lat = Math.abs(pos.lat);
+		var lon = Math.abs(pos.lon);
+		var lat_str = localization_snprintf("%3d.%04d%s",
+			Math.floor(lat), 10000*lat - 10000*Math.floor(lat),
+			pos.lat < 0 ? "S" : "N");
+		var lon_str = localization_snprintf("%3d.%04d%s",
+			Math.floor(lon), 10000*lon - 10000*Math.floor(lon),
+			pos.lon < 0 ? "W" : "E");
+
 		response.draw = {
 			"update_type": 'gu4',
 		};
@@ -532,10 +543,11 @@ return {
 				sunset: sunset,
 				moonrise: moonrise,
 				moonset: moonset,
-				//moonrise_heading: localization_snprintf("%.0f°", this.lunar.rise.azimuth * 180 / Math.PI ),
-				//moonset_heading: localization_snprintf("%.0f°", this.lunar.set.azimuth * 180 / Math.PI ),
 				moonrise_heading: this.heading_str(this.lunar.rise.azimuth),
 				moonset_heading: this.heading_str(this.lunar.set.azimuth),
+
+				lat: lat_str,
+				lon: lon_str,
 			},
 		};
 	},
