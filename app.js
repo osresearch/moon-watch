@@ -325,7 +325,12 @@ return {
 				enable_time_telling();
 				start_timer(self.node_name, 'timer_tick', 200);
 				self.log("entry called", "mars");
-				self.rover = "curiosity";
+				self.rover = 0;
+				self.rovers = [
+					{ name: "curiosity", lon: -137.4, sol: 49269 },
+					{ name: "perseverance", lon: -77.58, sol: 52304 },
+				];
+
 				self.last_minute = -1;
 			},
 			"exit": function(self,state_machine,event,response) {
@@ -333,6 +338,12 @@ return {
 			},
 			"middle_short_press_release": function(self,state_machine,event,response) {
 				state_machine.new_state("text_display");
+			},
+			"bottom_short_press_release": function(self,state_machine,event,response) {
+				self.rover = (self.rover + 1) % self.rovers.length;
+				self.minute = -1;
+				stop_timer(self.node_name, 'timer_tick');
+				start_timer(self.node_name, 'timer_tick', 100);
 			},
 			"timer_expired": function(self,state_machine,event,response) {
 				if (!is_this_timer_expired(event, self.node_name, 'timer_tick'))
@@ -357,10 +368,10 @@ return {
 					layout_function: "layout_parser_json",
 					layout_info: {
 						json_file: 'mars_layout',
-						rover: self.rover,
+						rover: self.rovers[self.rover].name,
 
 						time: localization_snprintf("%02d:%02d", self.hour, self.minute),
-						sol: localization_snprintf("sol %d", self.sol),
+						sol: localization_snprintf("%d", self.sol),
 					},
 				};
 				}
@@ -395,21 +406,16 @@ return {
 		var unix_epoch = get_unix_time();
 		this.mars = this.mars_time(unix_epoch);
 
-		var rovers = {
-			"curiosity": { lon: -137.4, sol: 49269 },
-			"perseverance": { lon: -77.58, sol: 46235 },
-		};
-
 		// update the local time based on the mars coordinated time (in days),
 		// the equation of time (in hours) and the rover's longitude (in deg)
-		var mars_local_time = this.mars.sol*24 + this.mars.eot - rovers[this.rover].lon * 24 / 360;
+		var mars_local_time = this.mars.sol*24 + this.mars.eot - this.rovers[this.rover].lon * 24 / 360;
 
 		// resulting local mars time is in hours; convert it to seconds
 		var mars_seconds = mars_local_time * 60 * 60;
 		this.second = mars_seconds % 60;
 		this.minute = Math.floor(mars_seconds / 60) % 60;
 		this.hour = Math.floor(mars_seconds / 3600) % 24;
-		this.sol = Math.floor(this.mars.sol - rovers[this.rover].sol);
+		this.sol = Math.floor(this.mars.sol - this.rovers[this.rover].sol);
 		//this.log("mars " + this.rover + " = " + this.mars_now + " " + this.hour + ":" + this.minute + ":" + this.second, "mars");
 	},
 
