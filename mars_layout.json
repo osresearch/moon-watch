@@ -1,0 +1,82 @@
+[
+    {
+      "id": 0,
+      "type": "container",
+      "direction": 1,
+      "main_alignment": 0,
+      "cross_alignment": 1,
+      "dimension": {
+        "type": "rigid",
+        "width": 240,
+        "height": 240
+      },
+      "placement": {
+        "type": "absolute",
+        "left": 0,
+        "top": 0
+      },
+      "visible": true,
+      "inversion": false
+    },
+    {
+        "id": 1,
+        "parent_id": 0,
+        "type": "image",
+        "image_name": "#rover",
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 200,
+            "height": 200
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 20,
+            "top": 20
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 2,
+        "parent_id": 0,
+        "type": "text",
+        "text": "#time",
+	"color": 3,
+	"ppem": 40,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 160,
+            "height": 160
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 120,
+            "top": 80
+        },
+        "visible": true,
+        "inversion": false
+    },
+    {
+        "id": 3,
+        "parent_id": 0,
+        "type": "text",
+        "text": "#sol",
+	"color": 3,
+	"ppem": 20,
+        "is_translate": false,
+        "dimension": {
+            "type": "rigid",
+            "width": 160,
+            "height": 160
+        },
+        "placement": {
+            "type": "absolute",
+            "left": 90,
+            "top": 200
+        },
+        "visible": true,
+        "inversion": false
+    }
+]

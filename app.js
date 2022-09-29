@@ -147,7 +147,7 @@ return {
 			},
 
 			"middle_short_press_release": function(self,sm,event,response) {
-				sm.new_state('stopwatch');
+				sm.new_state('mars');
 			},
 			"bottom_press": function(self,state_machine,event,response) {
 				// move the hands a bit
@@ -158,7 +158,8 @@ return {
 				};
 			},
 			"flick_away": function(self,sm,event,response) {
-				sm.new_state('animate_moon');
+				// don't do anything right now
+				//sm.new_state('animate_moon');
 			},
 		},
 
@@ -318,6 +319,63 @@ return {
 				self.animation_steps = 0;
 			},
 		},
+
+		"mars": {
+			"entry": function(self,sm,event,response) {
+				enable_time_telling();
+				start_timer(self.node_name, 'timer_tick', 200);
+				self.log("entry called", "mars");
+				self.rover = "curiosity";
+				self.last_minute = -1;
+			},
+			"exit": function(self,state_machine,event,response) {
+				stop_timer(self.node_name, 'timer_tick');
+			},
+			"middle_short_press_release": function(self,state_machine,event,response) {
+				state_machine.new_state("text_display");
+			},
+			"timer_expired": function(self,state_machine,event,response) {
+				if (!is_this_timer_expired(event, self.node_name, 'timer_tick'))
+					return;
+
+				self.update_mars_time();
+
+				var delay = 20 - (self.second % 20);
+				var redraw = self.minute != self.last_minute;
+
+				if (redraw)
+				{
+				self.log("redraw " + self.hour + ":" + self.minute + ":" + self.second, "mars");
+
+				self.last_minute = self.minute;
+				self.draw_hands(response);
+
+				response.draw = {
+					"update_type": 'du4',
+				};
+				response.draw[self.node_name] = {
+					layout_function: "layout_parser_json",
+					layout_info: {
+						json_file: 'mars_layout',
+						rover: self.rover,
+
+						time: localization_snprintf("%02d:%02d", self.hour, self.minute),
+						sol: localization_snprintf("sol %d", self.sol),
+					},
+				};
+				}
+
+				start_timer(self.node_name, 'timer_tick', delay * 1000);
+			},
+
+			// called every 20 seconds or so to update the hands
+			// based on https://www.giss.nasa.gov/tools/mars24/help/algorithm.html
+			"time_telling_update": function(self,state_machine,event,response) {
+				self.update_mars_time();
+				self.draw_hands(response);
+			},
+
+		},
 	},
 
 	"update_time": function() {
@@ -333,14 +391,36 @@ return {
 		this.quarter = Math.floor((this.hour * 3600 + this.second_past_hour) / (60 * 15));
 	},
 
+	"update_mars_time": function() {
+		var unix_epoch = get_unix_time();
+		this.mars = this.mars_time(unix_epoch);
+
+		var rovers = {
+			"curiosity": { lon: -137.4, sol: 49269 },
+			"perseverance": { lon: -77.58, sol: 46235 },
+		};
+
+		// update the local time based on the mars coordinated time (in days),
+		// the equation of time (in hours) and the rover's longitude (in deg)
+		var mars_local_time = this.mars.sol*24 + this.mars.eot - rovers[this.rover].lon * 24 / 360;
+
+		// resulting local mars time is in hours; convert it to seconds
+		var mars_seconds = mars_local_time * 60 * 60;
+		this.second = mars_seconds % 60;
+		this.minute = Math.floor(mars_seconds / 60) % 60;
+		this.hour = Math.floor(mars_seconds / 3600) % 24;
+		this.sol = Math.floor(this.mars.sol - rovers[this.rover].sol);
+		//this.log("mars " + this.rover + " = " + this.mars_now + " " + this.hour + ":" + this.minute + ":" + this.second, "mars");
+	},
+
 	"draw_hands": function(response) {
 		var hour = this.hour;
 		var minute = this.minute;
-		var seconds = this.second;
+		var second = this.second;
 
 		// put 12 at the top
-		var degrees_hour = 360 * (hour + minute/60 + seconds/3600 + 12) / 24;
-		var degrees_minute = this.second_past_hour * 360 / 3600;
+		var degrees_hour = 360 * (hour + minute/60 + second/3600 + 12) / 24;
+		var degrees_minute = (minute * 60 + second) * 360 / 3600;
 
 		// pre-wrap the hour hand
 		if (degrees_hour > 360)
@@ -587,6 +667,79 @@ return {
 				mode: mode_str,
 				lap: "lap",
 			},
+		};
+	},
+
+	"mars_time": function(unix_epoch)
+	{
+		var deg2rad = Math.PI / 180;
+		var sec_per_day = 24*60*60;
+
+		// UTC to Julian Date
+		var JD_ut = 2440587.5 + unix_epoch / sec_per_day;
+		// Julian Centuries
+		var T = (JD_ut - 2451545.0) / 36525;
+		// UTC to Terrestrial Time delta for leap seconds
+		// only used for times in the past. now fixed
+		// var TT_minus_UTC = 65.184 * T - 5.12 * T*T - 67.1 * T*T*T - 16.4*T*T*T*T;
+		// leap seconds as of 2022 (does not work for historical times)
+		var TT_minus_UTC = 69.184;
+		var JD_tt = JD_ut + TT_minus_UTC / 86400;
+
+		// Time offset from J2000 epoch (TT)
+		var delta_t = JD_tt - 2451545.0;
+
+		// Determine Mars mean anomaly (in radians)
+		var M = (19.3871 + 0.52402073 * delta_t) * deg2rad;
+
+		// Determine angle of Fiction Mean Sun
+		var alpha_fms = 270.3871 + 0.524038496 * delta_t;
+
+		// Determine perturbers
+		var perturbers = [
+			{A: 0.0071, tau:  2.2353, psi:  49.409},
+			{A: 0.0057, tau:  2.7543, psi: 168.173},
+			{A: 0.0039, tau:  1.1177, psi: 191.837},
+			{A: 0.0037, tau: 15.7866, psi:  21.736},
+			{A: 0.0021, tau:  2.1354, psi:  15.704},
+			{A: 0.0020, tau:  2.4694, psi:  95.528},
+			{A: 0.0018, tau: 32.8493, psi:  49.095},
+		];
+
+		var PBS = 0;
+		for(var i in perturbers)
+		{
+			var p = perturbers[i];
+			var deg = 0.985626 * delta_t / p.tau + p.psi;
+			PBS += p.A * Math.cos(deg * deg2rad);
+		}
+
+		// Determine equation of center
+		var v_minus_m = 0 +
+			(10.691 + 3.0e-7 * delta_t) * Math.sin(M) +
+			0.623 * Math.sin(2 * M) +
+			0.050 * Math.sin(3 * M) +
+			0.005 * Math.sin(5 * M) +
+			PBS;
+
+		// Determine aerocentric solar longitutde (in radians)
+		var L_s = (alpha_fms + v_minus_m) * deg2rad;
+
+		// Equation of Time, converted to hours
+		var eot = (0 +
+			2.861 * Math.sin(2*L_s) -
+			0.071 * Math.sin(4*L_s) +
+			0.002 * Math.sin(6*L_s) -
+			v_minus_m) * 24 / 360;
+
+		// Mean Solar Time at Mar's prime meridian, i.e. Airy Mean Time
+		// also known as Coordinated Mars Time
+		var mars_sol = ((JD_tt - 2451549.5) / 1.0274912517) + 44796.0 - 0.0009626;
+		var mst = 24 * (mars_sol - Math.floor(mars_sol));
+
+		return {
+			sol: mars_sol,
+			eot: eot,
 		};
 	},
 

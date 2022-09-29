@@ -73,10 +73,12 @@ $(call icon, moon_20, images/moon-5_0.png, 160, 160)
 $(call icon, moon_21, images/moon-5_1.png, 160, 160)
 $(call icon, moon_22, images/moon-5_2.png, 160, 160)
 $(call icon, moon_23, images/moon-5_3.png, 160, 160)
+$(call icon, curiosity, images/curiosity.png, 200, 200)
 
 layouts += moonphase_layout
 layouts += text_layout
 layouts += stopwatch_layout
+layouts += mars_layout
 
 compile: $(snapshot_file)
 
