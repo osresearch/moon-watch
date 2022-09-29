@@ -129,13 +129,6 @@ return {
 				}
 
 				self.draw_hands(response);
-/*
-				// schedule to redraw on 15-minute internvals
-				var sec_past_quarter = self.second_past_hour % (60 * 15);
-				var delay_sec = 60 * 15 - sec_past_quarter;
-
-				start_timer(self.node_name, 'timer_tick', delay_sec * 1000);
-*/
 				// update hands every 20 seconds, on whole minutes
 				start_timer(self.node_name, 'timer_tick', delay * 1000);
 			},
@@ -258,6 +251,7 @@ return {
 			"entry": function(self,sm,event,response) {
 				disable_time_telling();
 				start_timer(self.node_name, 'timer_tick', 200);
+				self.update_time();
 			},
 			"middle_short_press_release": function(self,sm,event,response) {
 				sm.new_state("draw_hands");
@@ -396,10 +390,6 @@ return {
 		this.minute = epoch % 60;
 		epoch = Math.floor(epoch / 60);
 		this.hour = epoch % 24;
-
-		// some commonly used values
-		this.second_past_hour = this.minute * 60 + this.second;
-		this.quarter = Math.floor((this.hour * 3600 + this.second_past_hour) / (60 * 15));
 	},
 
 	"update_mars_time": function() {
